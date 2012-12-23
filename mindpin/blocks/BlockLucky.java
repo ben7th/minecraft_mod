@@ -44,19 +44,22 @@ public class BlockLucky extends Block {
 
 		EntityPlayer player = BaseUtils.get_current_entity_player_from_world(world);
 		
-		if(f == 0) {
+		if (f == 0) {
 			player.attackEntityFrom(new BlockLuckyDamage(), 9999);
 		}
 		
-		if(f == 1){
+		if (f == 1) {
 			player.attackEntityFrom(new BlockLuckyDamage().set_explode(), 9999);
 			// 爆炸，不过这个爆炸和玩家本人死亡没什么关系
 			// 但是应该会伤及无辜
 			world.createExplosion(null, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
 		}
 		
-		ItemStack item_stack = new ItemStack(_get_drop_id(), 1, 0);
-		this.dropBlockAsItem_do(world, x, y, z, item_stack);
+		if (f > 1) {
+
+			ItemStack item_stack = new ItemStack(_get_drop_id(), 1, 0);
+			this.dropBlockAsItem_do(world, x, y, z, item_stack);
+		}
 	}
 	
 	@Override
