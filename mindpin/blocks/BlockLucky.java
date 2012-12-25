@@ -25,13 +25,13 @@ public class BlockLucky extends Block {
 	public BlockLucky(int par1, int par2) {
 		super(par1, par2, new Material(MapColor.stoneColor));
 
-		this.setBlockName("block_lucky")
-				.setTextureFile(ClientProxy.BLOCKS_PNG_PATH)
-				.setCreativeTab(MCMind.TAB_LUCKY)
-				.setLightValue(1)
-				.setHardness(2.0f)
-				.setResistance(10.0f)
-				.setStepSound(soundStoneFootstep);
+		setBlockName("block_lucky");
+		setTextureFile(ClientProxy.BLOCKS_PNG_PATH);
+		setCreativeTab(MCMind.TAB_LUCKY);
+		setLightValue(1);
+		setHardness(2.0f);
+		setResistance(10.0f);
+		setStepSound(soundStoneFootstep);
 
 		_init_drop_list();
 	}

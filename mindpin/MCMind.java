@@ -1,5 +1,6 @@
 package mindpin;
 
+import mindpin.blocks.BlockClover;
 import mindpin.blocks.BlockLucky;
 import mindpin.generators.GeneratorBlockLucky;
 import mindpin.tabs.TabDestiny;
@@ -19,7 +20,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class MCMind {
 	
-	public static int BLOCK_LUCKY_ID = 501;
+	public static int BLOCK_LUCKY_ID  = 501;
+	public static int BLOCK_CLOVER_ID = 502;
 	
 	public static CreativeTabs TAB_LUCKY = new TabDestiny("lucky");
 	
@@ -42,6 +44,11 @@ public class MCMind {
 		Block block_lucky = new BlockLucky(BLOCK_LUCKY_ID, 0);
 		ModLoader.addName(block_lucky, "幸运方块");
 		ModLoader.registerBlock(block_lucky);
+		
+		// 幸运四叶草方块
+		Block block_clover = new BlockClover(BLOCK_CLOVER_ID);
+		ModLoader.addName(block_clover, "幸运四叶草");
+		ModLoader.registerBlock(block_clover);
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());
