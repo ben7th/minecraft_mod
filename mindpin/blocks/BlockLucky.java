@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import mindpin.MindpinClientProxy;
+import mindpin.MCMind;
+import mindpin.ClientProxy;
 import mindpin.utils.BaseUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,8 +26,8 @@ public class BlockLucky extends Block {
 		super(par1, par2, new Material(MapColor.stoneColor));
 
 		this.setBlockName("block_lucky")
-				.setTextureFile(MindpinClientProxy.BLOCKS_PNG_PATH)
-				.setCreativeTab(CreativeTabs.tabBlock)
+				.setTextureFile(ClientProxy.BLOCKS_PNG_PATH)
+				.setCreativeTab(MCMind.TAB_LUCKY)
 				.setLightValue(1)
 				.setHardness(2.0f)
 				.setResistance(10.0f)
@@ -56,7 +56,6 @@ public class BlockLucky extends Block {
 		}
 		
 		if (f > 1) {
-
 			ItemStack item_stack = new ItemStack(_get_drop_id(), 1, 0);
 			this.dropBlockAsItem_do(world, x, y, z, item_stack);
 		}

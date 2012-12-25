@@ -1,6 +1,6 @@
 package mindpin.items;
 
-import mindpin.MindpinClientProxy;
+import mindpin.ClientProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -20,10 +20,10 @@ public class ItemFlowerWand extends Item {
 		super(par1);
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 		this.setItemName("item_flower_wand");
-		this.setTextureFile(MindpinClientProxy.ITEMS_PNG_PATH);
+		this.setTextureFile(ClientProxy.ITEMS_PNG_PATH);
 	}
 
-	// ÒÔÏÂÎªÐÐÎª°ó¶¨
+	// ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Îªï¿½ï¿½
 	public void onPlayerStoppedUsing(ItemStack item_stack, World world,
 			EntityPlayer player, int left_ticks_count) {
 		int spend_ticks_count = this.getMaxItemUseDuration(item_stack)
@@ -95,7 +95,7 @@ public class ItemFlowerWand extends Item {
 		ArrowNockEvent event = new ArrowNockEvent(player, item_stack);
 		MinecraftForge.EVENT_BUS.post(event);
 		if (event.isCanceled()) {
-			return event.result; // ±ØÐëÐ´£¬·ñÔò»áÓÐÆô¶¯Ê±×Ô¶¯Ê©·ÅµÄbug
+			return event.result; // ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ô¶ï¿½Ê©ï¿½Åµï¿½bug
 		}
 
 		if (player.capabilities.isCreativeMode

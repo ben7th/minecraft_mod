@@ -1,6 +1,6 @@
 package mindpin.blocks;
 
-import mindpin.MindpinClientProxy;
+import mindpin.ClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.GuiButton;
@@ -16,10 +16,10 @@ public class BlockMusicPlayer extends Block {
 		super(par1, par2, par3Material);
 
 		this.setBlockName("block_music_player");
-		this.setTextureFile(MindpinClientProxy.BLOCKS_PNG_PATH); // ÌùÍ¼
+		this.setTextureFile(ClientProxy.BLOCKS_PNG_PATH); // ï¿½ï¿½Í¼
 
-		this.setCreativeTab(CreativeTabs.tabBlock); // ÖÃÓÚ´´ÔìÄ£Ê½µÄ¡¡Block Ò³Ç©
-		this.setStepSound(soundStoneFootstep); // ·ÅÖÃÒôÐ§
+		this.setCreativeTab(CreativeTabs.tabBlock); // ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½Ä£Ê½ï¿½Ä¡ï¿½Block Ò³Ç©
+		this.setStepSound(soundStoneFootstep); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
 		this.setLightValue(1);
 	}
 	
@@ -36,14 +36,14 @@ public class BlockMusicPlayer extends Block {
 	public class GuiBlockMusicPlayer extends GuiScreen {
 		@Override
 		public void initGui() {
-			GuiButton prev = new GuiButton(1, (width - 175) / 2 + 20, (height - 165) / 2 + 60, 40, 20, "ÉÏÒ»¸ö");
+			GuiButton prev = new GuiButton(1, (width - 175) / 2 + 20, (height - 165) / 2 + 60, 40, 20, "ï¿½ï¿½Ò»ï¿½ï¿½");
 	        controlList.add(prev);
 		}
 		
 		@Override
 		public void drawScreen(int par1, int par2, float par3) {
 			drawDefaultBackground();
-			fontRenderer.drawString("ÒôÀÖ²¥·ÅÆ÷", (width - 175) / 2 + 6, (height - 165) / 2 + 6, 0x404040);
+			fontRenderer.drawString("ï¿½ï¿½ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½", (width - 175) / 2 + 6, (height - 165) / 2 + 6, 0x404040);
 		}
 	}
 }

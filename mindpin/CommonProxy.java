@@ -1,6 +1,6 @@
 package mindpin;
 
-public class MindpinCommonProxy {
+public class CommonProxy {
 	public void registerRenderThings(){
 		
 	}
