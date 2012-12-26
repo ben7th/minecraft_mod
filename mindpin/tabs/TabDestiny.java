@@ -12,7 +12,7 @@ public class TabDestiny extends CreativeTabs {
 	
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(MCMind.BLOCK_LUCKY_ID, 1, 0);
+		return new ItemStack(MCMind.ITEM_CLOVER_ID + 256, 1, 0);
 	}
 
 }

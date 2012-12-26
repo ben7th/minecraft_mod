@@ -3,9 +3,11 @@ package mindpin;
 import mindpin.blocks.BlockClover;
 import mindpin.blocks.BlockLucky;
 import mindpin.generators.GeneratorBlockLucky;
+import mindpin.items.ItemClover;
 import mindpin.tabs.TabDestiny;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.src.ModLoader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -22,6 +24,8 @@ public class MCMind {
 	
 	public static int BLOCK_LUCKY_ID  = 501;
 	public static int BLOCK_CLOVER_ID = 502;
+	
+	public static int ITEM_CLOVER_ID = 1001;
 	
 	public static CreativeTabs TAB_LUCKY = new TabDestiny("lucky");
 	
@@ -49,6 +53,12 @@ public class MCMind {
 		Block block_clover = new BlockClover(BLOCK_CLOVER_ID);
 		ModLoader.addName(block_clover, "幸运四叶草");
 		ModLoader.registerBlock(block_clover);
+		
+		// 物品
+		
+		// 幸运四叶草
+		Item item_clover = new ItemClover(ITEM_CLOVER_ID);
+		ModLoader.addName(item_clover, "幸运四叶草");
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());
