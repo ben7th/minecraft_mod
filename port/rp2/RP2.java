@@ -27,7 +27,7 @@ public class RP2 {
 	@Init
 	public void init(@SuppressWarnings("unused") FMLInitializationEvent event) {
 		
-		block_lamp = ModUtils.init_mod_block(new BlockLamp(503, true, true), "RP2Lamp", "RP2灯");
+		block_lamp = ModUtils.init_mod_block(new BlockLamp(503), "RP2Lamp", "RP2灯");
 		
 		proxy.register_render_things();
 	}
