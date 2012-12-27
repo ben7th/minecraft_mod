@@ -22,10 +22,9 @@ public class BlockLucky extends Block {
 	private List<BlockLuckyDrop> drop_list = new ArrayList<BlockLuckyDrop>();
 	private int rate_sum = 0;
 
-	public BlockLucky(int par1, int par2) {
-		super(par1, par2, new Material(MapColor.stoneColor));
+	public BlockLucky(int par1) {
+		super(par1, 0, new Material(MapColor.stoneColor));
 
-		setBlockName("block_lucky");
 		setTextureFile(ClientProxy.BLOCKS_PNG_PATH);
 		setCreativeTab(MCMind.TAB_LUCKY);
 		setLightValue(1);
