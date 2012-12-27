@@ -23,8 +23,8 @@ public class BlockLamp extends Block {
 		super(i, new Material(MapColor.woodColor));
 		
 		setBlockName("block_lamp");
-//		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 0.5F);
+		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+//		setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 0.5F);
 		setHardness(0.5F);
 		setCreativeTab(MCMind.TAB_LUCKY);
 		setLightValue(1.0f);
