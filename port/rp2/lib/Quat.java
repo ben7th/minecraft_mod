@@ -3,7 +3,6 @@ package port.rp2.lib;
 import java.util.Formatter;
 import java.util.Locale;
 
-
 public class Quat {
 	public double x;
 	public double y;
@@ -85,17 +84,18 @@ public class Quat {
 		this.s *= d;
 	}
 
-	public void rotate(Vector3 v) {
-		double ts = -this.x * v.x - this.y * v.y - this.z * v.z;
-		double tx = this.s * v.x + this.y * v.z - this.z * v.y;
-		double ty = this.s * v.y - this.x * v.z + this.z * v.x;
-		double tz = this.s * v.z + this.x * v.y - this.y * v.x;
+	public void rotate(MPVec3 v) {
+		double ts = -this.x * v.xCoord - this.y * v.yCoord - this.z * v.zCoord;
+		double tx = this.s * v.xCoord + this.y * v.zCoord - this.z * v.yCoord;
+		double ty = this.s * v.yCoord - this.x * v.zCoord + this.z * v.xCoord;
+		double tz = this.s * v.zCoord + this.x * v.yCoord - this.y * v.xCoord;
 
-		v.x = (tx * this.s - ts * this.x - ty * this.z + tz * this.y);
-		v.y = (ty * this.s - ts * this.y + tx * this.z - tz * this.x);
-		v.z = (tz * this.s - ts * this.z - tx * this.y + ty * this.x);
+		v.xCoord = (tx * this.s - ts * this.x - ty * this.z + tz * this.y);
+		v.yCoord = (ty * this.s - ts * this.y + tx * this.z - tz * this.x);
+		v.zCoord = (tz * this.s - ts * this.z - tx * this.y + ty * this.x);
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		Formatter fmt = new Formatter(sb, Locale.US);

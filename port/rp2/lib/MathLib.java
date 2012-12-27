@@ -1,6 +1,5 @@
 package port.rp2.lib;
 
-
 public class MathLib {
 	private static Matrix3[] orientMatrixList = new Matrix3[24];
 	private static Quat[] orientQuatList = new Quat[24];

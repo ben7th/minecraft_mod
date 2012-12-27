@@ -44,8 +44,7 @@ public class RenderLamp extends RenderCustomBlock {
 			this.context.startWorldRender(renderblocks);
 			this.context.bindTexture(ClientProxy.RP2_LIGHTTING_PATH);
 
-//			this.context.setSize(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-			this.context.setSize(0.5D, 0.5D, 0.5D, 0.5D, 0.5D, 0.5D);
+			this.context.setSize(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
 			
 			this.context.setTexFlags(0);
 			this.context.setupBox();
@@ -84,13 +83,11 @@ public class RenderLamp extends RenderCustomBlock {
 				(tc & 0xFF) / 255.0F);
 
 		this.context.setLocalLights(1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F);
-//		this.context.setSize(-0.05D, -0.05D, -0.05D, 1.05D, 1.05D, 1.05D);
-		this.context.setSize(0.2D, 0.2D, 0.2D, 0.8D, 0.8D, 0.8D);
+		this.context.setSize(-0.05D, -0.05D, -0.05D, 1.05D, 1.05D, 1.05D);
 		
 		this.context.setupBox();
 		this.context.transform();
-//		this.context.setSize(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-		this.context.setSize(0.25D, 0.25D, 0.25D, 0.75D, 0.75D, 0.75D);
+		this.context.setSize(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
 		
 		this.context.doMappingBox(63);
 		this.context.doLightLocal(63);

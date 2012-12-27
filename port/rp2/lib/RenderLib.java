@@ -19,39 +19,31 @@ public class RenderLib {
 		ForgeHooksClient.unbindTexture();
 	}
 
-//	public static void setIntredTexture() {
-//		bindTexture("/eloraam/logic/logic1.png");
-//	}
-//
-//	public static void setRedPowerTexture() {
-//		bindTexture("/eloraam/wiring/redpower1.png");
-//	}
-
 	public static void setDefaultTexture() {
 		unbindTexture();
 	}
 
-	public static void renderSpecialLever(Vector3 pos, Quat rot, int tex) {
+	public static void renderSpecialLever(MPVec3 pos, Quat rot, int tex) {
 		int k1 = (tex & 0xF) << 4;
 		int l1 = tex & 0xF0;
 
-		Vector3[] pl = new Vector3[8];
+		MPVec3[] pl = new MPVec3[8];
 		float f8 = 0.0625F;
 		float f9 = 0.0625F;
 		float f10 = 0.375F;
 
-		pl[0] = new Vector3(-f8, 0.0D, -f9);
-		pl[1] = new Vector3(f8, 0.0D, -f9);
-		pl[2] = new Vector3(f8, 0.0D, f9);
-		pl[3] = new Vector3(-f8, 0.0D, f9);
-		pl[4] = new Vector3(-f8, f10, -f9);
-		pl[5] = new Vector3(f8, f10, -f9);
-		pl[6] = new Vector3(f8, f10, f9);
-		pl[7] = new Vector3(-f8, f10, f9);
+		pl[0] = new MPVec3(-f8, 0.0D, -f9);
+		pl[1] = new MPVec3(f8, 0.0D, -f9);
+		pl[2] = new MPVec3(f8, 0.0D, f9);
+		pl[3] = new MPVec3(-f8, 0.0D, f9);
+		pl[4] = new MPVec3(-f8, f10, -f9);
+		pl[5] = new MPVec3(f8, f10, -f9);
+		pl[6] = new MPVec3(f8, f10, f9);
+		pl[7] = new MPVec3(-f8, f10, f9);
 
 		for (int i = 0; i < 8; i++) {
 			rot.rotate(pl[i]);
-			pl[i].add(pos.x + 0.5D, pos.y + 0.5D, pos.z + 0.5D);
+			pl[i].add(pos.xCoord + 0.5D, pos.yCoord + 0.5D, pos.zCoord + 0.5D);
 		}
 
 		float u1 = (k1 + 7) / 256.0F;
@@ -95,12 +87,13 @@ public class RenderLib {
 		addVectWithUV(pl[4], u1, v1);
 	}
 
-	public static void addVectWithUV(Vector3 vect, double u, double v) {
+	public static void addVectWithUV(MPVec3 vect, double u, double v) {
 		Tessellator tessellator = Tessellator.instance;
-		tessellator.addVertexWithUV(vect.x, vect.y, vect.z, u, v);
+		tessellator
+				.addVertexWithUV(vect.xCoord, vect.yCoord, vect.zCoord, u, v);
 	}
 
-	public static void renderPointer(Vector3 pos, Quat rot) {
+	public static void renderPointer(MPVec3 pos, Quat rot) {
 		Tessellator tessellator = Tessellator.instance;
 		double u = 0.390625D;
 		double v = 0.015625D;
@@ -109,15 +102,15 @@ public class RenderLib {
 
 		tessellator.setColorOpaque_F(0.9F, 0.9F, 0.9F);
 
-		Vector3[] pl = new Vector3[8];
-		pl[0] = new Vector3(0.4D, 0.0D, 0.0D);
-		pl[1] = new Vector3(0.0D, 0.0D, 0.2D);
-		pl[2] = new Vector3(-0.2D, 0.0D, 0.0D);
-		pl[3] = new Vector3(0.0D, 0.0D, -0.2D);
-		pl[4] = new Vector3(0.4D, 0.1D, 0.0D);
-		pl[5] = new Vector3(0.0D, 0.1D, 0.2D);
-		pl[6] = new Vector3(-0.2D, 0.1D, 0.0D);
-		pl[7] = new Vector3(0.0D, 0.1D, -0.2D);
+		MPVec3[] pl = new MPVec3[8];
+		pl[0] = new MPVec3(0.4D, 0.0D, 0.0D);
+		pl[1] = new MPVec3(0.0D, 0.0D, 0.2D);
+		pl[2] = new MPVec3(-0.2D, 0.0D, 0.0D);
+		pl[3] = new MPVec3(0.0D, 0.0D, -0.2D);
+		pl[4] = new MPVec3(0.4D, 0.1D, 0.0D);
+		pl[5] = new MPVec3(0.0D, 0.1D, 0.2D);
+		pl[6] = new MPVec3(-0.2D, 0.1D, 0.0D);
+		pl[7] = new MPVec3(0.0D, 0.1D, -0.2D);
 
 		for (int i = 0; i < 8; i++) {
 			rot.rotate(pl[i]);
@@ -174,17 +167,18 @@ public class RenderLib {
 		return rle.metaRenders[rle.mapDamageValue(md)];
 	}
 
-	private static RenderCustomBlock makeRenderer(Block bl, Class rcl) {
+	private static RenderCustomBlock makeRenderer(Block bl, Class<?> rcl) {
 		try {
 			return (RenderCustomBlock) rcl.getDeclaredConstructor(
-					new Class[] { Block.class }).newInstance(new Object[] { bl });
+					new Class[] { Block.class }).newInstance(
+					new Object[] { bl });
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public static void setRenderer(Block bl, Class rcl) {
+	public static void setRenderer(Block bl, Class<?> rcl) {
 		RenderCustomBlock rnd = makeRenderer(bl, rcl);
 		if (renderers[bl.blockID] == null) {
 			renderers[bl.blockID] = new RenderListEntry();
@@ -193,7 +187,7 @@ public class RenderLib {
 			renderers[bl.blockID].metaRenders[i] = rnd;
 	}
 
-	public static void setRenderer(Block bl, int md, Class rcl) {
+	public static void setRenderer(Block bl, int md, Class<?> rcl) {
 		RenderCustomBlock rnd = makeRenderer(bl, rcl);
 		if (renderers[bl.blockID] == null) {
 			renderers[bl.blockID] = new RenderListEntry();
@@ -201,7 +195,7 @@ public class RenderLib {
 		renderers[bl.blockID].metaRenders[md] = rnd;
 	}
 
-	public static void setHighRenderer(Block bl, int md, Class rcl) {
+	public static void setHighRenderer(Block bl, int md, Class<?> rcl) {
 		RenderCustomBlock rnd = makeRenderer(bl, rcl);
 		if (renderers[bl.blockID] == null) {
 			renderers[bl.blockID] = new RenderShiftedEntry(8);
@@ -209,7 +203,7 @@ public class RenderLib {
 		renderers[bl.blockID].metaRenders[md] = rnd;
 	}
 
-	public static void setDefaultRenderer(Block bl, int shift, Class rcl) {
+	public static void setDefaultRenderer(Block bl, int shift, Class<?> rcl) {
 		RenderCustomBlock rnd = makeRenderer(bl, rcl);
 		if (renderers[bl.blockID] == null) {
 			renderers[bl.blockID] = new RenderShiftedEntry(shift);
@@ -221,7 +215,8 @@ public class RenderLib {
 		renderers[bl.blockID].defaultRender = rnd;
 	}
 
-	public static void setShiftedRenderer(Block bl, int md, int shift, Class rcl) {
+	public static void setShiftedRenderer(Block bl, int md, int shift,
+			Class<?> rcl) {
 		RenderCustomBlock rnd = makeRenderer(bl, rcl);
 		if (renderers[bl.blockID] == null) {
 			renderers[bl.blockID] = new RenderShiftedEntry(shift);

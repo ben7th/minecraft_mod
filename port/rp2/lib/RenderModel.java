@@ -7,16 +7,15 @@ import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
-import mindpin.MCMind;
+import port.rp2.RP2;
 
 public class RenderModel {
-	public Vector3[] vertexList;
+	public MPVec3[] vertexList;
 	public TexVertex[][] texList;
 	int[][][] groups;
 
 	public static RenderModel loadModel(String name) {
-//		InputStream is = RedPowerCore.class.getResourceAsStream(name);
-		InputStream is = MCMind.class.getResourceAsStream(name);
+		InputStream is = RP2.class.getResourceAsStream(name);
 
 		ModelReader ml = new ModelReader();
 		try {
@@ -24,7 +23,7 @@ public class RenderModel {
 		} catch (IOException e) {
 			return null;
 		}
-		ArrayList vtl = new ArrayList();
+		ArrayList<TexVertex[]> vtl = new ArrayList<TexVertex[]>();
 
 		int i = 0;
 		while (i < ml.faceno.size()) {
@@ -54,7 +53,7 @@ public class RenderModel {
 		}
 
 		RenderModel tr = new RenderModel();
-		tr.vertexList = ((Vector3[]) ml.vertex.toArray(new Vector3[0]));
+		tr.vertexList = ((MPVec3[]) ml.vertex.toArray(new MPVec3[0]));
 		tr.texList = ((TexVertex[][]) vtl.toArray(new TexVertex[0][]));
 
 		tr.groups = new int[ml.grcnt.size()][][];
@@ -94,19 +93,19 @@ public class RenderModel {
 	}
 
 	public static class ModelReader {
-		public ArrayList vertex;
-		public ArrayList faceno;
-		public ArrayList texvert;
-		public ArrayList groups;
-		public ArrayList grcnt;
+		public ArrayList<MPVec3> vertex;
+		public ArrayList<Integer> faceno;
+		public ArrayList<TexVertex> texvert;
+		public ArrayList<Integer> groups;
+		public ArrayList<Integer> grcnt;
 		int fno = 0;
 
 		public ModelReader() {
-			this.vertex = new ArrayList();
-			this.texvert = new ArrayList();
-			this.faceno = new ArrayList();
-			this.groups = new ArrayList();
-			this.grcnt = new ArrayList();
+			this.vertex = new ArrayList<MPVec3>();
+			this.faceno = new ArrayList<Integer>();
+			this.texvert = new ArrayList<TexVertex>();
+			this.groups = new ArrayList<Integer>();
+			this.grcnt = new ArrayList<Integer>();
 		}
 
 		private void eatline(StreamTokenizer tok) throws IOException {
@@ -202,10 +201,10 @@ public class RenderModel {
 					}
 
 					if (tok.sval.equals("v")) {
-						Vector3 nv = new Vector3();
-						nv.x = getfloat(tok);
-						nv.y = getfloat(tok);
-						nv.z = getfloat(tok);
+						MPVec3 nv = new MPVec3();
+						nv.xCoord = getfloat(tok);
+						nv.yCoord = getfloat(tok);
+						nv.zCoord = getfloat(tok);
 						this.vertex.add(nv);
 						endline(tok);
 					} else if (tok.sval.equals("vt")) {
