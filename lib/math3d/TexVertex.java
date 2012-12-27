@@ -1,4 +1,4 @@
-package port.rp2.lib;
+package lib.math3d;
 
 public class TexVertex {
 	public int vtx;

@@ -23,7 +23,7 @@ public class ItemFlowerWand extends Item {
 		this.setTextureFile(ClientProxy.ITEMS_PNG_PATH);
 	}
 
-	// ����Ϊ��Ϊ��
+	@Override
 	public void onPlayerStoppedUsing(ItemStack item_stack, World world,
 			EntityPlayer player, int left_ticks_count) {
 		int spend_ticks_count = this.getMaxItemUseDuration(item_stack)
@@ -71,25 +71,17 @@ public class ItemFlowerWand extends Item {
 		}
 	}
 
-	/**
-	 * How long it takes to use or consume an item
-	 */
+	@Override
 	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
 		return 72000;
 	}
 
-	/**
-	 * returns the action that specifies what animation to play when the items
-	 * is being used
-	 */
+	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
 		return EnumAction.bow;
 	}
 
-	/**
-	 * Called whenever this item is equipped and the right mouse button is
-	 * pressed. Args: itemStack, world, entityPlayer
-	 */
+	@Override
 	public ItemStack onItemRightClick(ItemStack item_stack, World world,
 			EntityPlayer player) {
 		ArrowNockEvent event = new ArrowNockEvent(player, item_stack);

@@ -1,4 +1,4 @@
-package port.rp2.lib;
+package lib.renderhelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,10 +7,12 @@ import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
+import lib.math3d.TexVertex;
+import lib.math3d.Vector3;
 import port.rp2.RP2;
 
 public class RenderModel {
-	public MPVec3[] vertexList;
+	public Vector3[] vertexList;
 	public TexVertex[][] texList;
 	int[][][] groups;
 
@@ -53,7 +55,7 @@ public class RenderModel {
 		}
 
 		RenderModel tr = new RenderModel();
-		tr.vertexList = ((MPVec3[]) ml.vertex.toArray(new MPVec3[0]));
+		tr.vertexList = ((Vector3[]) ml.vertex.toArray(new Vector3[0]));
 		tr.texList = ((TexVertex[][]) vtl.toArray(new TexVertex[0][]));
 
 		tr.groups = new int[ml.grcnt.size()][][];
@@ -93,7 +95,7 @@ public class RenderModel {
 	}
 
 	public static class ModelReader {
-		public ArrayList<MPVec3> vertex;
+		public ArrayList<Vector3> vertex;
 		public ArrayList<Integer> faceno;
 		public ArrayList<TexVertex> texvert;
 		public ArrayList<Integer> groups;
@@ -101,7 +103,7 @@ public class RenderModel {
 		int fno = 0;
 
 		public ModelReader() {
-			this.vertex = new ArrayList<MPVec3>();
+			this.vertex = new ArrayList<Vector3>();
 			this.faceno = new ArrayList<Integer>();
 			this.texvert = new ArrayList<TexVertex>();
 			this.groups = new ArrayList<Integer>();
@@ -201,10 +203,10 @@ public class RenderModel {
 					}
 
 					if (tok.sval.equals("v")) {
-						MPVec3 nv = new MPVec3();
-						nv.xCoord = getfloat(tok);
-						nv.yCoord = getfloat(tok);
-						nv.zCoord = getfloat(tok);
+						Vector3 nv = new Vector3();
+						nv.x = getfloat(tok);
+						nv.y = getfloat(tok);
+						nv.z = getfloat(tok);
 						this.vertex.add(nv);
 						endline(tok);
 					} else if (tok.sval.equals("vt")) {

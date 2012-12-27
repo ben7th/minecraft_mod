@@ -1,7 +1,8 @@
-package port.rp2.lib;
+package lib.math3d;
 
 import java.util.Formatter;
 import java.util.Locale;
+
 
 public class Matrix3 {
 	public double xx;
@@ -83,12 +84,12 @@ public class Matrix3 {
 		return tr;
 	}
 
-	public MPVec3 getBasisVector(int n) {
+	public Vector3 getBasisVector(int n) {
 		if (n == 0)
-			return new MPVec3(this.xx, this.xy, this.xz);
+			return new Vector3(this.xx, this.xy, this.xz);
 		if (n == 1)
-			return new MPVec3(this.yx, this.yy, this.yz);
-		return new MPVec3(this.zx, this.zy, this.zz);
+			return new Vector3(this.yx, this.yy, this.yz);
+		return new Vector3(this.zx, this.zy, this.zz);
 	}
 
 	public double det() {
@@ -97,17 +98,14 @@ public class Matrix3 {
 				* (this.yx * this.zy - this.yy * this.zx);
 	}
 
-	public void rotate(MPVec3 v) {
-		double tx = this.xx * v.xCoord + this.yx * v.yCoord + this.zx
-				* v.zCoord;
-		double ty = this.xy * v.xCoord + this.yy * v.yCoord + this.zy
-				* v.zCoord;
-		double tz = this.xz * v.xCoord + this.yz * v.yCoord + this.zz
-				* v.zCoord;
+	public void rotate(Vector3 v) {
+		double tx = this.xx * v.x + this.yx * v.y + this.zx * v.z;
+		double ty = this.xy * v.x + this.yy * v.y + this.zy * v.z;
+		double tz = this.xz * v.x + this.yz * v.y + this.zz * v.z;
 
-		v.xCoord = tx;
-		v.yCoord = ty;
-		v.zCoord = tz;
+		v.x = tx;
+		v.y = ty;
+		v.z = tz;
 	}
 
 	@Override

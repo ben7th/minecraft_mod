@@ -1,4 +1,4 @@
-package port.rp2.lib;
+package lib.renderhelper;
 
 import java.util.Random;
 
@@ -17,9 +17,8 @@ public abstract class RenderCustomBlock {
 	public abstract void randomDisplayTick(World paramyc, int paramInt1,
 			int paramInt2, int paramInt3, Random paramRandom);
 
-	public abstract void renderWorldBlock(RenderBlocks parambbb,
-			IBlockAccess paramym, int paramInt1, int paramInt2, int paramInt3,
-			int paramInt4);
+	public abstract void renderWorldBlock(RenderBlocks parambbb, IBlockAccess paramym,
+			int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
 	public abstract void renderInvBlock(RenderBlocks parambbb, int paramInt);
 }

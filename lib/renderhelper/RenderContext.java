@@ -1,5 +1,9 @@
-package port.rp2.lib;
+package lib.renderhelper;
 
+import lib.math3d.MathLib;
+import lib.math3d.Matrix3;
+import lib.math3d.TexVertex;
+import lib.math3d.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -34,13 +38,13 @@ public class RenderContext {
 			{ 2, 3, 5, 4, 1, 0, 224603, 27, 112320 } };
 
 	public Matrix3 basis = new Matrix3();
-	public MPVec3 localOffset = new MPVec3();
-	public MPVec3 globalOrigin = new MPVec3();
-	public MPVec3 boxSize1 = new MPVec3();
-	public MPVec3 boxSize2 = new MPVec3();
+	public Vector3 localOffset = new Vector3();
+	public Vector3 globalOrigin = new Vector3();
+	public Vector3 boxSize1 = new Vector3();
+	public Vector3 boxSize2 = new Vector3();
 	public RenderModel boundModel = null;
-	public MPVec3[] vertexList;
-	private MPVec3[] vertexListBox = new MPVec3[8];
+	public Vector3[] vertexList;
+	private Vector3[] vertexListBox = new Vector3[8];
 	public TexVertex[][] cornerList;
 	private TexVertex[][] cornerListBox = new TexVertex[6][4];
 
@@ -86,7 +90,7 @@ public class RenderContext {
 		this.globalOrigin.set(x, y, z);
 	}
 
-	public void setPos(MPVec3 v) {
+	public void setPos(Vector3 v) {
 		this.globalOrigin.set(v);
 	}
 
@@ -94,7 +98,7 @@ public class RenderContext {
 		this.localOffset.set(x, y, z);
 	}
 
-	public void setRelPos(MPVec3 v) {
+	public void setRelPos(Vector3 v) {
 		this.localOffset.set(v);
 	}
 
@@ -253,28 +257,32 @@ public class RenderContext {
 
 	public void setupBox() {
 		this.vertexList = this.vertexListBox;
-		this.vertexList[0].set(this.boxSize2.xCoord, this.boxSize2.yCoord, this.boxSize1.zCoord);
-		this.vertexList[1].set(this.boxSize1.xCoord, this.boxSize2.yCoord, this.boxSize1.zCoord);
-		this.vertexList[2].set(this.boxSize1.xCoord, this.boxSize2.yCoord, this.boxSize2.zCoord);
-		this.vertexList[3].set(this.boxSize2.xCoord, this.boxSize2.yCoord, this.boxSize2.zCoord);
-		this.vertexList[4].set(this.boxSize2.xCoord, this.boxSize1.yCoord, this.boxSize1.zCoord);
-		this.vertexList[5].set(this.boxSize1.xCoord, this.boxSize1.yCoord, this.boxSize1.zCoord);
-		this.vertexList[6].set(this.boxSize1.xCoord, this.boxSize1.yCoord, this.boxSize2.zCoord);
-		this.vertexList[7].set(this.boxSize2.xCoord, this.boxSize1.yCoord, this.boxSize2.zCoord);
+		this.vertexList[0].set(this.boxSize2.x, this.boxSize2.y,
+				this.boxSize1.z);
+		this.vertexList[1].set(this.boxSize1.x, this.boxSize2.y,
+				this.boxSize1.z);
+		this.vertexList[2].set(this.boxSize1.x, this.boxSize2.y,
+				this.boxSize2.z);
+		this.vertexList[3].set(this.boxSize2.x, this.boxSize2.y,
+				this.boxSize2.z);
+		this.vertexList[4].set(this.boxSize2.x, this.boxSize1.y,
+				this.boxSize1.z);
+		this.vertexList[5].set(this.boxSize1.x, this.boxSize1.y,
+				this.boxSize1.z);
+		this.vertexList[6].set(this.boxSize1.x, this.boxSize1.y,
+				this.boxSize2.z);
+		this.vertexList[7].set(this.boxSize2.x, this.boxSize1.y,
+				this.boxSize2.z);
 	}
 
 	public void transformRotate() {
 		for (int i = 0; i < this.vertexList.length; i++) {
-			this.vertexList[i].add(
-					this.localOffset.xCoord - 0.5D,
-					this.localOffset.yCoord - 0.5D, 
-					this.localOffset.zCoord - 0.5D);
+			this.vertexList[i].add(this.localOffset.x - 0.5D,
+					this.localOffset.y - 0.5D, this.localOffset.z - 0.5D);
 
 			this.basis.rotate(this.vertexList[i]);
-			this.vertexList[i].add(
-					this.globalOrigin.xCoord + 0.5D,
-					this.globalOrigin.yCoord + 0.5D, 
-					this.globalOrigin.zCoord + 0.5D);
+			this.vertexList[i].add(this.globalOrigin.x + 0.5D,
+					this.globalOrigin.y + 0.5D, this.globalOrigin.z + 0.5D);
 		}
 	}
 
@@ -335,42 +343,42 @@ public class RenderContext {
 		this.cornerList = this.cornerListBox;
 
 		if ((sides & 0x3) > 0) {
-			double v1 = 1.0D - this.boxSize2.xCoord;
-			double v2 = 1.0D - this.boxSize1.xCoord;
+			double v1 = 1.0D - this.boxSize2.x;
+			double v2 = 1.0D - this.boxSize1.x;
 			if ((sides & 0x1) > 0) {
-				double u1 = 1.0D - this.boxSize2.zCoord;
-				double u2 = 1.0D - this.boxSize1.zCoord;
+				double u1 = 1.0D - this.boxSize2.z;
+				double u2 = 1.0D - this.boxSize1.z;
 				setSideUV(0, u1, u2, v1, v2);
 			}
 			if ((sides & 0x2) > 0) {
-				double u1 = this.boxSize1.zCoord;
-				double u2 = this.boxSize2.zCoord;
+				double u1 = this.boxSize1.z;
+				double u2 = this.boxSize2.z;
 				setSideUV(1, u1, u2, v1, v2);
 			}
 		}
 		if ((sides & 0x3C) == 0)
 			return;
-		double v1 = 1.0D - this.boxSize2.yCoord;
-		double v2 = 1.0D - this.boxSize1.yCoord;
+		double v1 = 1.0D - this.boxSize2.y;
+		double v2 = 1.0D - this.boxSize1.y;
 
 		if ((sides & 0x4) > 0) {
-			double u1 = 1.0D - this.boxSize2.xCoord;
-			double u2 = 1.0D - this.boxSize1.xCoord;
+			double u1 = 1.0D - this.boxSize2.x;
+			double u2 = 1.0D - this.boxSize1.x;
 			setSideUV(2, u1, u2, v1, v2);
 		}
 		if ((sides & 0x8) > 0) {
-			double u1 = this.boxSize1.xCoord;
-			double u2 = this.boxSize2.xCoord;
+			double u1 = this.boxSize1.x;
+			double u2 = this.boxSize2.x;
 			setSideUV(3, u1, u2, v1, v2);
 		}
 		if ((sides & 0x10) > 0) {
-			double u1 = this.boxSize1.zCoord;
-			double u2 = this.boxSize2.zCoord;
+			double u1 = this.boxSize1.z;
+			double u2 = this.boxSize2.z;
 			setSideUV(4, u1, u2, v1, v2);
 		}
 		if ((sides & 0x20) > 0) {
-			double u1 = 1.0D - this.boxSize2.zCoord;
-			double u2 = 1.0D - this.boxSize1.zCoord;
+			double u1 = 1.0D - this.boxSize2.z;
+			double u2 = 1.0D - this.boxSize1.z;
 			setSideUV(5, u1, u2, v1, v2);
 		}
 	}
@@ -656,17 +664,17 @@ public class RenderContext {
 
 	private void lightSmoothFace(int fn) {
 		int ff = 0;
-		if (this.boxSize1.yCoord > 0.0D)
+		if (this.boxSize1.y > 0.0D)
 			ff |= 1;
-		if (this.boxSize2.yCoord < 1.0D)
+		if (this.boxSize2.y < 1.0D)
 			ff |= 2;
-		if (this.boxSize1.zCoord > 0.0D)
+		if (this.boxSize1.z > 0.0D)
 			ff |= 4;
-		if (this.boxSize2.zCoord < 1.0D)
+		if (this.boxSize2.z < 1.0D)
 			ff |= 8;
-		if (this.boxSize1.xCoord > 0.0D)
+		if (this.boxSize1.x > 0.0D)
 			ff |= 16;
-		if (this.boxSize2.xCoord < 1.0D)
+		if (this.boxSize2.x < 1.0D)
 			ff |= 32;
 		float gf4;
 		float gf3;
@@ -1057,24 +1065,24 @@ public class RenderContext {
 				TexVertex c = this.cornerList[i][0];
 				tessellator.setColorOpaque_F(c.r, c.g, c.b);
 				if (this.useNormal) {
-					MPVec3 v = this.vertexList[c.vtx];
+					Vector3 v = this.vertexList[c.vtx];
 					c = this.cornerList[i][1];
-					MPVec3 v1 = new MPVec3(this.vertexList[c.vtx]);
+					Vector3 v1 = new Vector3(this.vertexList[c.vtx]);
 					c = this.cornerList[i][2];
-					MPVec3 v2 = new MPVec3(this.vertexList[c.vtx]);
+					Vector3 v2 = new Vector3(this.vertexList[c.vtx]);
 					v1.subtract(v);
 					v2.subtract(v);
 					v1.crossProduct(v2);
 					v1.normalize();
-					tessellator.setNormal((float) v1.xCoord, (float) v1.yCoord, (float) v1.zCoord);
+					tessellator.setNormal((float) v1.x, (float) v1.y, (float) v1.z);
 				} else {
 					tessellator.setBrightness(c.brtex);
 				}
 
 				for (int j = 0; j < 4; j++) {
 					c = this.cornerList[i][j];
-					MPVec3 v = this.vertexList[c.vtx];
-					tessellator.addVertexWithUV(v.xCoord, v.yCoord, v.zCoord, c.u, c.v);
+					Vector3 v = this.vertexList[c.vtx];
+					tessellator.addVertexWithUV(v.x, v.y, v.z, c.u, c.v);
 				}
 			}
 		}
@@ -1100,23 +1108,23 @@ public class RenderContext {
 					this.tintA);
 
 			if (this.useNormal) {
-				MPVec3 v = this.vertexList[c.vtx];
+				Vector3 v = this.vertexList[c.vtx];
 				c = this.cornerList[i][1];
-				MPVec3 v1 = new MPVec3(this.vertexList[c.vtx]);
+				Vector3 v1 = new Vector3(this.vertexList[c.vtx]);
 				c = this.cornerList[i][2];
-				MPVec3 v2 = new MPVec3(this.vertexList[c.vtx]);
+				Vector3 v2 = new Vector3(this.vertexList[c.vtx]);
 				v1.subtract(v);
 				v2.subtract(v);
 				v1.crossProduct(v2);
 				v1.normalize();
-				tessellator.setNormal((float) v1.xCoord, (float) v1.yCoord, (float) v1.zCoord);
+				tessellator.setNormal((float) v1.x, (float) v1.y, (float) v1.z);
 			} else {
 				tessellator.setBrightness(c.brtex);
 			}
 			for (int j = 0; j < 4; j++) {
 				c = this.cornerList[i][j];
-				MPVec3 v = this.vertexList[c.vtx];
-				tessellator.addVertexWithUV(v.xCoord, v.yCoord, v.zCoord, c.u, c.v);
+				Vector3 v = this.vertexList[c.vtx];
+				tessellator.addVertexWithUV(v.x, v.y, v.z, c.u, c.v);
 			}
 		}
 
@@ -1137,8 +1145,8 @@ public class RenderContext {
 
 				for (int j = 0; j < 4; j++) {
 					c = this.cornerList[i][j];
-					MPVec3 v = this.vertexList[c.vtx];
-					tessellator.addVertexWithUV(v.xCoord, v.yCoord, v.zCoord, c.u, c.v);
+					Vector3 v = this.vertexList[c.vtx];
+					tessellator.addVertexWithUV(v.x, v.y, v.z, c.u, c.v);
 				}
 			}
 	}
@@ -1162,8 +1170,8 @@ public class RenderContext {
 					if (!this.useNormal) {
 						tessellator.setBrightness(c.brtex);
 					}
-					MPVec3 v = this.vertexList[c.vtx];
-					tessellator.addVertexWithUV(v.xCoord, v.yCoord, v.zCoord, c.u, c.v);
+					Vector3 v = this.vertexList[c.vtx];
+					tessellator.addVertexWithUV(v.x, v.y, v.z, c.u, c.v);
 				}
 			}
 		}
@@ -1194,15 +1202,15 @@ public class RenderContext {
 		Tessellator tessellator = Tessellator.instance;
 
 		for (int p : points) {
-			MPVec3 v = this.vertexList[p];
-			tessellator.addVertex(v.xCoord, v.yCoord, v.zCoord);
+			Vector3 v = this.vertexList[p];
+			tessellator.addVertex(v.x, v.y, v.z);
 		}
 	}
 
 	public void bindModel(RenderModel model) {
-		this.vertexList = new MPVec3[model.vertexList.length];
+		this.vertexList = new Vector3[model.vertexList.length];
 		for (int i = 0; i < this.vertexList.length; i++) {
-			MPVec3 v = new MPVec3(model.vertexList[i]);
+			Vector3 v = new Vector3(model.vertexList[i]);
 			this.basis.rotate(v);
 			v.add(this.globalOrigin);
 			this.vertexList[i] = v;
@@ -1213,13 +1221,11 @@ public class RenderContext {
 
 	public void bindModelOffset(RenderModel model, double ofx, double ofy,
 			double ofz) {
-		this.vertexList = new MPVec3[model.vertexList.length];
+		this.vertexList = new Vector3[model.vertexList.length];
 		for (int i = 0; i < this.vertexList.length; i++) {
-			MPVec3 v = new MPVec3(model.vertexList[i]);
-			v.add(
-					this.localOffset.xCoord - ofx, 
-					this.localOffset.yCoord - ofy,
-					this.localOffset.zCoord - ofz);
+			Vector3 v = new Vector3(model.vertexList[i]);
+			v.add(this.localOffset.x - ofx, this.localOffset.y - ofy,
+					this.localOffset.z - ofz);
 
 			this.basis.rotate(v);
 			v.add(ofx, ofy, ofz);
@@ -1253,7 +1259,7 @@ public class RenderContext {
 
 	public RenderContext() {
 		for (int i = 0; i < 8; i++)
-			this.vertexListBox[i] = new MPVec3();
+			this.vertexListBox[i] = new Vector3();
 		int[][] vtxl = { { 7, 6, 5, 4 }, { 0, 1, 2, 3 }, { 0, 4, 5, 1 },
 				{ 2, 6, 7, 3 }, { 1, 5, 6, 2 }, { 3, 7, 4, 0 } };
 

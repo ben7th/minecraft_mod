@@ -2,6 +2,10 @@ package port.rp2.blocks;
 
 import java.util.Random;
 
+import lib.renderhelper.RenderContext;
+import lib.renderhelper.RenderCustomBlock;
+import lib.renderhelper.RenderLib;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,9 +13,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import port.rp2.ClientProxy;
-import port.rp2.lib.RenderContext;
-import port.rp2.lib.RenderCustomBlock;
-import port.rp2.lib.RenderLib;
 
 public class RenderLamp extends RenderCustomBlock {
 	int light_color = 0xFFF100;
