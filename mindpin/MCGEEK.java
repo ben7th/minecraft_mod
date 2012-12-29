@@ -2,7 +2,7 @@ package mindpin;
 
 import net.minecraft.block.Block;
 import mindpin.blocks.BlockClover;
-import mindpin.blocks.lucky.BlockLucky;
+import mindpin.blocks.BlockLucky;
 import mindpin.generators.GeneratorBlockLucky;
 import mindpin.proxy.Proxy;
 import mindpin.proxy.R;

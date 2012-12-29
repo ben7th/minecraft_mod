@@ -1,4 +1,4 @@
-package mindpin.blocks.lucky;
+package mindpin.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +45,7 @@ public class BlockLucky extends Block {
 			
 			if (f == 0) {
 				player.attackEntityFrom(new BlockLuckyDamage(), 9999);
+				System.out.println("诅咒");
 			}
 			
 			if (f == 1) {
@@ -52,11 +53,11 @@ public class BlockLucky extends Block {
 				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系
 				// 但是应该会伤及无辜
 				world.createExplosion(player, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
+				System.out.println("爆炸");
 			}
 			
 			if (f > 1) {
-				ItemStack item_stack = new ItemStack(_get_drop_id(), 1, 0);
-				this.dropBlockAsItem_do(world, x, y, z, item_stack);
+				this.dropBlockAsItem_do(world, x, y, z, _get_drop_item_stack());
 			}
 			
 		} else {
@@ -90,12 +91,24 @@ public class BlockLucky extends Block {
 	// ----------------------------------------
 	
 	private void _init_drop_list() {
-		_add_drop(Item.diamond.shiftedIndex, 95); // 钻石
-		_add_drop(Block.blockDiamond.blockID, 5); // 钻石块
+		_add_drop(new ItemStack(Block.blockDiamond), 1); 	// 钻石块
+		_add_drop(new ItemStack(Block.enderChest), 2); 		// 末影箱
+		_add_drop(new ItemStack(Item.diamond), 10); 		// 钻石
+		_add_drop(new ItemStack(Item.melonSeeds), 10);		// 西瓜种子
+		
+		_add_drop(new ItemStack(Item.swordSteel), 20);		// 铁剑
+		_add_drop(new ItemStack(Item.shovelSteel), 20);		// 铁镐
+		_add_drop(new ItemStack(Item.bread, 16), 20);		// 面包 x 16
+		
+		_add_drop(new ItemStack(Item.leather, 16), 30);		// 皮 x 16
+		_add_drop(new ItemStack(Item.coal, 32), 30);		// 煤 x 32
+		_add_drop(new ItemStack(Item.ingotIron, 32), 30);	// 铁 x 32
+		_add_drop(new ItemStack(Block.wood, 32), 30);		// 原木 x 32
+		_add_drop(new ItemStack(Block.cloth, 8), 30);		// 羊毛 x 8
 	}
 
-	private void _add_drop(int id, int rate) {
-		drop_list.add(new BlockLuckyDrop(id, rate));
+	private void _add_drop(ItemStack item_stack, int rate) {
+		drop_list.add(new BlockLuckyDrop(item_stack, rate));
 		rate_sum += rate;
 	}
 
@@ -103,47 +116,64 @@ public class BlockLucky extends Block {
 	 * 用来计算应该掉落什么物品
 	 * 应该保证每个物品的掉落符合设置的随机值
 	 * 例如设置的随机值为：
-	 * 		空 2
+	 * 		金 2
 	 * 		煤 3
 	 * 		铁 2
 	 * 
 	 * rate_sum = 2 + 3 + 2 = 7，于是
 	 * drop_value 会随机产生为 1, 2, 3, 4, 5, 6, 7 中某个值
 	 * 当值为：
-	 * 		1, 2 时，掉落为 空
+	 * 		1, 2 时，掉落为 金
 	 * 		3, 4, 5 时，掉落为 煤
 	 * 		5, 6 时，掉落为 铁
 	 * 
 	 * 掉落概率符合 2:3:2 的分布
 	 */
-	private int _get_drop_id() {
+	private ItemStack _get_drop_item_stack() {
 		int drop_value = new Random().nextInt(rate_sum) + 1; // 1 ~ rate_sum
 
 		for (BlockLuckyDrop b : drop_list) {
 			drop_value -= b.drop_rate;
 
 			if (drop_value <= 0) {
-				return b.minecraft_id;
+				return b.item_stack.copy(); // 必须调用 copy 方法来复制一份，否则重复同一种就不再掉落了
 			}
 		}
 
-		return 0;
+		System.out.println("啥也没");
+		return null;
 	}
 
 	// -------------------------------------------
 	
 	private class BlockLuckyDrop {
-		private int minecraft_id;
+		private ItemStack item_stack;
 		private int drop_rate;
 
-		private BlockLuckyDrop(int minecraft_id, int drop_rate) {
-			this.minecraft_id = minecraft_id;
+		private BlockLuckyDrop(ItemStack item_stack, int drop_rate) {
+			this.item_stack = item_stack;
 			this.drop_rate = drop_rate;
 		}
 	}
 
-	private class BlockLuckyDamage extends DamageSource {
+	private static class BlockLuckyDamage extends DamageSource {
 		private boolean explode = false;
+		
+		final private static String[] EXPLODE_MSGS = new String[] {
+			"被幸运方块炸死了！",
+			"像烟花般绽放",
+			"碉堡了",
+			"懂得了爆炸即艺术",
+			"被炸得七零八落"
+		};
+		
+		final private static String[] MSGS = new String[] {
+			"你若安好，便是晴天",
+			"啊朋友再见，再见吧再见吧再见吧……",
+			"神秘地蒸发了",
+			"啊~~~~~~！",
+			"听到一个声音说：“你已经死了。”"
+		};
 
 		protected BlockLuckyDamage() {
 			super("block_lucky_damage");
@@ -157,10 +187,14 @@ public class BlockLucky extends Block {
 		@Override
 		public String getDeathMessage(EntityPlayer player) {
 			if (this.explode) {
-				return "§c" + player.getEntityName() + " §e被幸运方块炸死了！";
+				return "§c" + player.getEntityName() + " §e" + _get_random_str(EXPLODE_MSGS);
 			}
 
-			return "§c" + player.getEntityName() + " §e你若安好，便是晴天"; // 啊朋友再见，再见吧再见吧再见吧……
+			return "§c" + player.getEntityName() + " §e" + _get_random_str(MSGS); // 
+		}
+		
+		private String _get_random_str(String[] msgs){
+			return msgs[new Random().nextInt(msgs.length)];
 		}
 	}
 }

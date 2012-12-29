@@ -1,7 +1,7 @@
 package mindpin.proxy;
 
 import mindpin.MCGEEK;
-import mindpin.blocks.lucky.RenderBlockLucky;
+import mindpin.renders.RenderBlockLucky;
 import mindpin.rp2.lib.renderhelper.RenderLib;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.RenderingRegistry;

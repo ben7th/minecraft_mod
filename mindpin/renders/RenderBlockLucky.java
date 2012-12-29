@@ -1,4 +1,4 @@
-package mindpin.blocks.lucky;
+package mindpin.renders;
 
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
