@@ -1,12 +1,11 @@
-package mindpin.blocks;
+package mindpin.blocks.lucky;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import mindpin.MCMind;
-import mindpin.ClientProxy;
-import mindpin.utils.BaseUtils;
+import mindpin.proxy.ClientProxy;
+import mindpin.proxy.R;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -26,7 +25,7 @@ public class BlockLucky extends Block {
 		super(par1, 0, new Material(MapColor.stoneColor));
 
 		setTextureFile(ClientProxy.BLOCKS_PNG_PATH);
-		setCreativeTab(MCMind.TAB_LUCKY);
+		setCreativeTab(R.TAB_LUCKY);
 		setLightValue(1);
 		setHardness(2.0f);
 		setResistance(10.0f);
@@ -36,28 +35,35 @@ public class BlockLucky extends Block {
 	}
 	
 	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-		if (world.isRemote) return;
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x,
+			int y, int z) {
+		boolean re = super.removeBlockByPlayer(world, player, x, y, z);
 		
-		int f = new Random().nextInt(4); // 0, 1, 2, 3
-
-		EntityPlayer player = BaseUtils.get_current_entity_player_from_world(world);
-		
-		if (f == 0) {
-			player.attackEntityFrom(new BlockLuckyDamage(), 9999);
+		if (!world.isRemote) {
+			
+			int f = new Random().nextInt(4); // 0, 1, 2, 3
+			
+			if (f == 0) {
+				player.attackEntityFrom(new BlockLuckyDamage(), 9999);
+			}
+			
+			if (f == 1) {
+				player.attackEntityFrom(new BlockLuckyDamage().set_explode(), 9999);
+				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系
+				// 但是应该会伤及无辜
+				world.createExplosion(player, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
+			}
+			
+			if (f > 1) {
+				ItemStack item_stack = new ItemStack(_get_drop_id(), 1, 0);
+				this.dropBlockAsItem_do(world, x, y, z, item_stack);
+			}
+			
+		} else {
+			this.dropBlockAsItem_do(world, x, y, z, null);
 		}
 		
-		if (f == 1) {
-			player.attackEntityFrom(new BlockLuckyDamage().set_explode(), 9999);
-			// 爆炸，不过这个爆炸和玩家本人死亡没什么关系
-			// 但是应该会伤及无辜
-			world.createExplosion(null, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
-		}
-		
-		if (f > 1) {
-			ItemStack item_stack = new ItemStack(_get_drop_id(), 1, 0);
-			this.dropBlockAsItem_do(world, x, y, z, item_stack);
-		}
+		return re;
 	}
 	
 	@Override
@@ -65,7 +71,24 @@ public class BlockLucky extends Block {
 		// 掉落判定发生在敲碎方块时，因此不通过正常途径产生掉落，这里返回 0
 		return 0;
 	}
+	
+	@Override
+	public boolean canRenderInPass(int pass) {
+		return true;
+	}
+	
+	@Override
+	public int getRenderBlockPass() {
+		return 1;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return R.RENDER_TYPE_BLOCK_LUCKY;
+	}
 
+	// ----------------------------------------
+	
 	private void _init_drop_list() {
 		_add_drop(Item.diamond.shiftedIndex, 95); // 钻石
 		_add_drop(Block.blockDiamond.blockID, 5); // 钻石块
@@ -123,7 +146,7 @@ public class BlockLucky extends Block {
 		private boolean explode = false;
 
 		protected BlockLuckyDamage() {
-			super("block lucky");
+			super("block_lucky_damage");
 		}
 
 		BlockLuckyDamage set_explode() {
@@ -134,10 +157,10 @@ public class BlockLucky extends Block {
 		@Override
 		public String getDeathMessage(EntityPlayer player) {
 			if (this.explode) {
-				return "§c" + player.getEntityName() + " §e死于幸运方块引发的剧烈爆炸";
+				return "§c" + player.getEntityName() + " §e被幸运方块炸死了！";
 			}
 
-			return "§c" + player.getEntityName() + " §e死于幸运方块唤来的神秘厄运";
+			return "§c" + player.getEntityName() + " §e你若安好，便是晴天"; // 啊朋友再见，再见吧再见吧再见吧……
 		}
 	}
 }

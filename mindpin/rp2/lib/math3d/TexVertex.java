@@ -1,4 +1,4 @@
-package lib.math3d;
+package mindpin.rp2.lib.math3d;
 
 public class TexVertex {
 	public int vtx;

@@ -2,11 +2,11 @@ package mindpin.generators;
 
 import java.util.Random;
 
-import mindpin.MCMind;
+import mindpin.proxy.R;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
-public class GeneratorBlockLucky extends MindBaseGenerator {
+public class GeneratorBlockLucky extends MCGEEKBaseGenerator {
 
 	/**
 	 * 用于构造幸运方块
@@ -40,7 +40,7 @@ public class GeneratorBlockLucky extends MindBaseGenerator {
 				|| block_below_id == Block.waterStill.blockID)
 			return; // 不刷新在水上
 		
-		int id = MCMind.BLOCK_LUCKY_ID;
+		int id = R.BLOCK_LUCKY_ID;
 		
 		world.setBlockWithNotify(x, y + rand.nextInt(4), z, id);
 	}
@@ -52,7 +52,7 @@ public class GeneratorBlockLucky extends MindBaseGenerator {
 		int z = block_z + rand.nextInt(16);
 		int y = rand.nextInt(100) + 100;
 		
-		int id = MCMind.BLOCK_LUCKY_ID;
+		int id = R.BLOCK_LUCKY_ID;
 		
 		world.setBlockWithNotify(x, y, z, id);
 	}

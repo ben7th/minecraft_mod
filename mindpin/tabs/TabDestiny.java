@@ -1,6 +1,6 @@
 package mindpin.tabs;
 
-import mindpin.MCMind;
+import mindpin.proxy.R;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
@@ -12,7 +12,7 @@ public class TabDestiny extends CreativeTabs {
 	
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(MCMind.ITEM_CLOVER_ID + 256, 1, 0);
+		return new ItemStack(R.BLOCK_CLOVER_ID/* + 256*/, 1, 0);
 	}
 
 }

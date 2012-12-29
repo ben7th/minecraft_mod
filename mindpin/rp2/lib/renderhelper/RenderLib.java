@@ -1,7 +1,7 @@
-package lib.renderhelper;
+package mindpin.rp2.lib.renderhelper;
 
-import lib.math3d.Quat;
-import lib.math3d.Vector3;
+import mindpin.rp2.lib.math3d.Quat;
+import mindpin.rp2.lib.math3d.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.client.ForgeHooksClient;

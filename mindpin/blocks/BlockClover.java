@@ -1,7 +1,7 @@
 package mindpin.blocks;
 
-import mindpin.ClientProxy;
-import mindpin.MCMind;
+import mindpin.proxy.ClientProxy;
+import mindpin.proxy.R;
 import net.minecraft.block.BlockFlower;
 
 public class BlockClover extends BlockFlower {
@@ -10,7 +10,7 @@ public class BlockClover extends BlockFlower {
 		super(par1, 2);
 		
 		setTextureFile(ClientProxy.BLOCKS_PNG_PATH);
-		setCreativeTab(MCMind.TAB_LUCKY);
+		setCreativeTab(R.TAB_LUCKY);
 		setLightValue(0.2F);
 	}
 

@@ -1,11 +1,8 @@
-package lib.renderhelper;
-
-import java.util.Random;
+package mindpin.rp2.lib.renderhelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public abstract class RenderCustomBlock {
 	protected Block block;
@@ -13,9 +10,6 @@ public abstract class RenderCustomBlock {
 	public RenderCustomBlock(Block bl) {
 		this.block = bl;
 	}
-
-	public abstract void randomDisplayTick(World paramyc, int paramInt1,
-			int paramInt2, int paramInt3, Random paramRandom);
 
 	public abstract void renderWorldBlock(RenderBlocks parambbb, IBlockAccess paramym,
 			int paramInt1, int paramInt2, int paramInt3, int paramInt4);

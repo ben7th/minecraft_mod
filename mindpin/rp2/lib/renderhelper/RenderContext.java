@@ -1,9 +1,9 @@
-package lib.renderhelper;
+package mindpin.rp2.lib.renderhelper;
 
-import lib.math3d.MathLib;
-import lib.math3d.Matrix3;
-import lib.math3d.TexVertex;
-import lib.math3d.Vector3;
+import mindpin.rp2.lib.math3d.MathLib;
+import mindpin.rp2.lib.math3d.Matrix3;
+import mindpin.rp2.lib.math3d.TexVertex;
+import mindpin.rp2.lib.math3d.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;

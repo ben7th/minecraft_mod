@@ -1,4 +1,4 @@
-package lib.renderhelper;
+package mindpin.rp2.lib.renderhelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
-import lib.math3d.TexVertex;
-import lib.math3d.Vector3;
-import port.rp2.RP2;
+import mindpin.MCGEEK;
+import mindpin.rp2.lib.math3d.TexVertex;
+import mindpin.rp2.lib.math3d.Vector3;
 
 public class RenderModel {
 	public Vector3[] vertexList;
@@ -17,7 +17,7 @@ public class RenderModel {
 	int[][][] groups;
 
 	public static RenderModel loadModel(String name) {
-		InputStream is = RP2.class.getResourceAsStream(name);
+		InputStream is = MCGEEK.class.getResourceAsStream(name);
 
 		ModelReader ml = new ModelReader();
 		try {
@@ -31,21 +31,21 @@ public class RenderModel {
 		while (i < ml.faceno.size()) {
 			TexVertex[] tv = new TexVertex[4];
 			for (int j = 0; j < 4; j++) {
-				int n = ((Integer) ml.faceno.get(i)).intValue();
+				int n = ml.faceno.get(i);
 				i++;
 				if (n < 0) {
 					throw new IllegalArgumentException("Non-Quad Face");
 				}
 
-				int m = ((Integer) ml.faceno.get(i)).intValue();
+				int m = ml.faceno.get(i);
 				i++;
 
-				TexVertex t = ((TexVertex) ml.texvert.get(m - 1)).copy();
+				TexVertex t = ml.texvert.get(m - 1).copy();
 				t.vtx = (n - 1);
 				t.v = (1.0D - t.v);
 				tv[j] = t;
 			}
-			int n = ((Integer) ml.faceno.get(i)).intValue();
+			int n = ml.faceno.get(i);
 			i++;
 			if (n >= 0) {
 				throw new IllegalArgumentException("Non-Quad Face");
@@ -55,14 +55,14 @@ public class RenderModel {
 		}
 
 		RenderModel tr = new RenderModel();
-		tr.vertexList = ((Vector3[]) ml.vertex.toArray(new Vector3[0]));
-		tr.texList = ((TexVertex[][]) vtl.toArray(new TexVertex[0][]));
+		tr.vertexList = ml.vertex.toArray(new Vector3[0]);
+		tr.texList = vtl.toArray(new TexVertex[0][]);
 
 		tr.groups = new int[ml.grcnt.size()][][];
 		for (i = 0; i < ml.grcnt.size(); i++) {
-			int l = ((Integer) ml.grcnt.get(i)).intValue();
+			int l = ml.grcnt.get(i);
 			tr.groups[i] = new int[l][];
-			for (int j = 0; j < ((Integer) ml.grcnt.get(i)).intValue(); j++) {
+			for (int j = 0; j < ml.grcnt.get(i); j++) {
 				tr.groups[i][j] = new int[2];
 			}
 		}
@@ -74,12 +74,11 @@ public class RenderModel {
 		while (i < ml.groups.size()) {
 			if (lgs >= 0) {
 				tr.groups[lgmn][lgsn][0] = lgs;
-				tr.groups[lgmn][lgsn][1] = ((Integer) ml.groups.get(i + 2))
-						.intValue();
+				tr.groups[lgmn][lgsn][1] = ml.groups.get(i + 2);
 			}
-			lgmn = ((Integer) ml.groups.get(i)).intValue();
-			lgsn = ((Integer) ml.groups.get(i + 1)).intValue();
-			lgs = ((Integer) ml.groups.get(i + 2)).intValue();
+			lgmn = ml.groups.get(i);
+			lgsn = ml.groups.get(i + 1);
+			lgs = ml.groups.get(i + 2);
 			i += 3;
 		}
 		if (lgs >= 0) {
@@ -167,8 +166,8 @@ public class RenderModel {
 			if (this.grcnt.size() == gr) {
 				this.grcnt.add(Integer.valueOf(0));
 			}
-			this.grcnt.set(gr, Integer.valueOf(Math.max(
-					((Integer) this.grcnt.get(gr)).intValue(), sub + 1)));
+			this.grcnt.set(gr,
+					Integer.valueOf(Math.max(this.grcnt.get(gr), sub + 1)));
 		}
 
 		private void parsegroup(StreamTokenizer tok) throws IOException {

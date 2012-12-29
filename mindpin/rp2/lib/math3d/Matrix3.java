@@ -1,4 +1,4 @@
-package lib.math3d;
+package mindpin.rp2.lib.math3d;
 
 import java.util.Formatter;
 import java.util.Locale;
