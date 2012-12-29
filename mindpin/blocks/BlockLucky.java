@@ -45,7 +45,7 @@ public class BlockLucky extends Block {
 			
 			if (f == 0) {
 				player.attackEntityFrom(new BlockLuckyDamage(), 9999);
-				System.out.println("诅咒");
+				System.out.println("幸运方块：诅咒");
 			}
 			
 			if (f == 1) {
@@ -53,7 +53,7 @@ public class BlockLucky extends Block {
 				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系
 				// 但是应该会伤及无辜
 				world.createExplosion(player, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
-				System.out.println("爆炸");
+				System.out.println("幸运方块：爆炸");
 			}
 			
 			if (f > 1) {
@@ -90,21 +90,15 @@ public class BlockLucky extends Block {
 
 	// ----------------------------------------
 	
+	/**
+	 * 开始设定了比较复杂的掉落列表在这里，后来觉得还是简单一些好，因为死亡率实在是太高了
+	 * 随着设定丰富慢慢改吧
+	 */
 	private void _init_drop_list() {
-		_add_drop(new ItemStack(Block.blockDiamond), 1); 	// 钻石块
-		_add_drop(new ItemStack(Block.enderChest), 2); 		// 末影箱
-		_add_drop(new ItemStack(Item.diamond), 10); 		// 钻石
-		_add_drop(new ItemStack(Item.melonSeeds), 10);		// 西瓜种子
-		
-		_add_drop(new ItemStack(Item.swordSteel), 20);		// 铁剑
-		_add_drop(new ItemStack(Item.shovelSteel), 20);		// 铁镐
-		_add_drop(new ItemStack(Item.bread, 16), 20);		// 面包 x 16
-		
-		_add_drop(new ItemStack(Item.leather, 16), 30);		// 皮 x 16
-		_add_drop(new ItemStack(Item.coal, 32), 30);		// 煤 x 32
-		_add_drop(new ItemStack(Item.ingotIron, 32), 30);	// 铁 x 32
-		_add_drop(new ItemStack(Block.wood, 32), 30);		// 原木 x 32
-		_add_drop(new ItemStack(Block.cloth, 8), 30);		// 羊毛 x 8
+		_add_drop(new ItemStack(Block.blockDiamond), 5); 	// 钻石块
+		_add_drop(new ItemStack(Block.enderChest), 5); 		// 末影箱
+		_add_drop(new ItemStack(Item.swordDiamond), 50);	// 钻石剑
+		_add_drop(new ItemStack(Item.diamond), 100); 		// 钻石
 	}
 
 	private void _add_drop(ItemStack item_stack, int rate) {
@@ -140,7 +134,6 @@ public class BlockLucky extends Block {
 			}
 		}
 
-		System.out.println("啥也没");
 		return null;
 	}
 
