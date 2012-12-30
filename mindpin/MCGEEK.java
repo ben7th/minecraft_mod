@@ -1,13 +1,13 @@
 package mindpin;
 
-import net.minecraft.block.Block;
-import net.minecraftforge.oredict.OreDictionary;
 import mindpin.blocks.BlockClover;
 import mindpin.blocks.BlockLucky;
+import mindpin.generators.GeneratorBlockClover;
 import mindpin.generators.GeneratorBlockLucky;
 import mindpin.proxy.Proxy;
 import mindpin.proxy.R;
 import mindpin.utils.ModUtils;
+import net.minecraft.block.Block;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -41,6 +41,7 @@ public class MCGEEK {
 				
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());
+		GameRegistry.registerWorldGenerator(new GeneratorBlockClover());
 		
 		proxy.register_render_things();
 	}
