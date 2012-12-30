@@ -1,6 +1,7 @@
 package mindpin;
 
 import net.minecraft.block.Block;
+import net.minecraftforge.oredict.OreDictionary;
 import mindpin.blocks.BlockClover;
 import mindpin.blocks.BlockLucky;
 import mindpin.generators.GeneratorBlockLucky;
