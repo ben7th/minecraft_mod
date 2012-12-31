@@ -16,12 +16,12 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
-public class RenderBlockLucky extends RenderCustomBlock {
+public class CustomRenderBlockLucky extends RenderCustomBlock {
 	int light_color = 0xFFF100;
 
 	RenderContext context;
 
-	public RenderBlockLucky(Block block) {
+	public CustomRenderBlockLucky(Block block) {
 		super(block);
 		this.context = new RenderContext();
 	}
