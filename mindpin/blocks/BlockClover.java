@@ -22,4 +22,8 @@ public class BlockClover extends BlockFlower {
 		return par1 == Block.grass.blockID || par1 == Block.dirt.blockID || par1 == Block.tilledField.blockID;
 	}
 
+	@Override
+	public int getRenderType() {
+		return R.RENDER_TYPE_BLOCK_CLOVER;
+	}
 }

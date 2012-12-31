@@ -16,4 +16,5 @@ public class R {
 	
 	// render types
 	final public static int RENDER_TYPE_BLOCK_LUCKY = -501;
+	final public static int RENDER_TYPE_BLOCK_CLOVER = -502;
 }
