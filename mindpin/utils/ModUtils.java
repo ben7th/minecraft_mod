@@ -2,7 +2,9 @@ package mindpin.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.ModLoader;
+import net.minecraft.world.World;
 
 public class ModUtils {
 
@@ -22,6 +24,12 @@ public class ModUtils {
 		ModLoader.addName(item, chs_name);
 		
 		return item;
+	}
+	
+	public static void send_public_notice(World world, String string) {
+		if (!world.isRemote) {
+			MinecraftServer.getServer().getConfigurationManager().func_92027_k(string);
+		}
 	}
 	
 }

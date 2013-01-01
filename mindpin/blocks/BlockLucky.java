@@ -60,8 +60,6 @@ public class BlockLucky extends Block {
 				this.dropBlockAsItem_do(world, x, y, z, _get_drop_item_stack());
 			}
 			
-		} else {
-			this.dropBlockAsItem_do(world, x, y, z, null);
 		}
 		
 		return re;
@@ -180,10 +178,10 @@ public class BlockLucky extends Block {
 		@Override
 		public String getDeathMessage(EntityPlayer player) {
 			if (this.explode) {
-				return "§c" + player.getEntityName() + " §e" + _get_random_str(EXPLODE_MSGS);
+				return "§c" + player.getEntityName() + " §c" + _get_random_str(EXPLODE_MSGS);
 			}
 
-			return "§c" + player.getEntityName() + " §e" + _get_random_str(MSGS); // 
+			return "§c" + player.getEntityName() + " §c" + _get_random_str(MSGS); // 
 		}
 		
 		private String _get_random_str(String[] msgs){

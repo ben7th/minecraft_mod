@@ -16,5 +16,10 @@ public class MCGEEKCreativeTabs extends CreativeTabs {
 	public ItemStack getIconItemStack() {
 		return new ItemStack(this.item_or_block_id, 1, 0);
 	}
+	
+	@Override
+	public String getTranslatedTabLabel() {
+		return "itemGroup." + this.getTabLabel();
+	}
 
 }
