@@ -1,6 +1,7 @@
 package mindpin.utils;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.ModLoader;
@@ -29,6 +30,13 @@ public class ModUtils {
 	public static void send_public_notice(World world, String string) {
 		if (!world.isRemote) {
 			MinecraftServer.getServer().getConfigurationManager().func_92027_k(string);
+		}
+	}
+	
+	public static void send_msg_to_player(World world, EntityPlayer player, String string) {
+		if (!world.isRemote) {
+			player.sendChatToPlayer(string);
+			// 似乎用 player.addChatMessage(""); 也可以，暂时没看出区别
 		}
 	}
 	

@@ -1,9 +1,11 @@
 package mindpin.items;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
+import mindpin.blocks.IhasRecipe;
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
 import mindpin.utils.MCGPosition;
@@ -11,23 +13,25 @@ import mindpin.utils.ModUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class ItemTreeAxeIron extends ItemAxe {
+public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 
 	final private static String[] TREE_DOWN_MSGS = new String[] {
-		"树倒啦 ~~~~~~~ >_<",
-		"要致富，先种树，再砍树……",
-		"砍树不忘栽树人，可持续发展人人有责。",
-		"砍倒了一棵树，毁掉了小鸟的家园！",
-		"树上没有猴儿……砍个什么劲呀……",
-		"劳动人民砍树忙 @_@",
-		"呢棵树太乞人憎咗，仆街呀！！"
-	};
-	
+			"树倒啦 ~~~~~~~ >_<", 
+			"要致富，先种树，再砍树……", 
+			"砍树不忘栽树人，可持续发展人人有责。",
+			"砍倒了一棵树，毁掉了小鸟的家园！", 
+			"树上没有猴儿……砍个什么劲呀……", 
+			"劳动人民砍树忙 @_@",
+			"呢棵树太乞人憎咗，仆街呀！！" 
+		};
+
 	public ItemTreeAxeIron(int item_id) {
 		super(item_id, EnumToolMaterial.IRON);
 
@@ -36,6 +40,33 @@ public class ItemTreeAxeIron extends ItemAxe {
 		setCreativeTab(R.TAB_PRACTICE);
 	}
 
+	@Override
+	public List<Object[]> recipe_objects() {
+		List<Object[]> res = new ArrayList<Object[]>();
+		
+		Object[] o = new Object[] {
+			"BBC",
+			"BA ",
+			"BA ",
+			Character.valueOf('B'), Item.ingotIron,
+			Character.valueOf('A'), Item.stick,
+			Character.valueOf('C'), Block.blockSteel
+		};
+		
+		res.add(o);
+		return res;
+	}
+	
+	@Override
+	public void add_recipes() {
+		ItemStack is = new ItemStack(this);
+		List<Object[]> objs = recipe_objects();
+		
+		for(Object[] o : objs) {
+			ModLoader.addRecipe(is, o);
+		}
+	}
+	
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, int x, int y, int z,
 			EntityPlayer player) {
@@ -46,22 +77,28 @@ public class ItemTreeAxeIron extends ItemAxe {
 		World world = player.worldObj;
 		TAPosition this_pos = new TAPosition(world, x, y, z);
 
-		if (!this_pos.is_wood_block()) return false;
-		
-		player.sendChatToPlayer("啊啊啊啊啊啊");
-		
-		player.addChatMessage("哈哈哈");
-		
-		ArrayList<TAPosition> block_pos_arr = this_pos.get_connected_wood_blocks();
-		
-		_send_public_notice(world, player);
+		if (!this_pos.is_wood_block())
+			return false;
+
+		ArrayList<TAPosition> block_pos_arr = this_pos
+				.get_connected_wood_blocks();
+
+		if (block_pos_arr.size() > 10) {
+			ModUtils.send_msg_to_player(world, player, "这棵树的体积超过了10个木块，一斧头貌似砍不掉");
+			return false;
+		}
+
+		if (block_pos_arr.size() > 5) {
+			_send_public_notice(world, player);
+		}
+
 		for (TAPosition pos : block_pos_arr)
 			if (!pos.equals(this_pos))
 				pos.drop_self();
-		
+
 		return false;
 	}
-	
+
 	private void _send_public_notice(World world, EntityPlayer player) {
 		String msg = TREE_DOWN_MSGS[new Random().nextInt(TREE_DOWN_MSGS.length)];
 		ModUtils.send_public_notice(world, "§6" + player.getEntityName() + " §6" + msg);
@@ -104,18 +141,19 @@ public class ItemTreeAxeIron extends ItemAxe {
 			}
 			return false;
 		}
-		
+
 		public ArrayList<TAPosition> get_connected_wood_blocks() {
 			ArrayList<TAPosition> res = new ArrayList<TAPosition>();
 			Stack<TAPosition> positions = new Stack<TAPosition>();
-			
+
 			positions.push(this);
 
 			do {
 				TAPosition pos = positions.pop();
 				for (ForgeDirection to_dir : ForgeDirection.VALID_DIRECTIONS) {
 					TAPosition new_pos = new TAPosition(pos, to_dir);
-					if (new_pos.is_wood_block() && new_pos.not_in(positions) && new_pos.not_in(res)) {
+					if (new_pos.is_wood_block() && new_pos.not_in(positions)
+							&& new_pos.not_in(res)) {
 						positions.push(new_pos);
 					}
 				}

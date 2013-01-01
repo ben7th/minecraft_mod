@@ -37,8 +37,8 @@ public class MCGEEK {
 	@Init
 	public void init(@SuppressWarnings("unused") FMLInitializationEvent event) {
 		// 标签
-		LanguageRegistry.instance().addStringLocalization(R.TAB_LUCKY.getTranslatedTabLabel(), "运气");
-		LanguageRegistry.instance().addStringLocalization(R.TAB_PRACTICE.getTranslatedTabLabel(), "实践");
+		LanguageRegistry.instance().addStringLocalization(R.TAB_LUCKY.get_label_name(), "运气");
+		LanguageRegistry.instance().addStringLocalization(R.TAB_PRACTICE.get_label_name(), "实践");
 		
 		// 那些年，我们一起堆的方块
 		ModUtils.init_mod_block(block_lucky, "block_lucky", "幸运方块");
@@ -46,6 +46,7 @@ public class MCGEEK {
 		
 		// 工具是人类前进的基础
 		ModUtils.init_mod_item(item_board_axe_iron, "item_tree_axe_iron", "铁制砍树斧");
+		((ItemTreeAxeIron) item_board_axe_iron).add_recipes();
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());
