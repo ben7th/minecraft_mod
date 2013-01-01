@@ -8,7 +8,7 @@ public class R {
 	final public static int BLOCK_CLOVER_ID = 502;
 	
 	// items
-	final public static int ITEM_TREE_AXE_IRON = 2001; // 2257
+	final public static int ITEM_TREE_AXE_IRON = 10001; // 10257
 	
 	// creative tabs
 	final public static MCGEEKCreativeTabs TAB_LUCKY = new MCGEEKCreativeTabs("lucky", R.BLOCK_CLOVER_ID);
