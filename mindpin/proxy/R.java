@@ -9,6 +9,8 @@ public class R {
 	
 	// items
 	final public static int ITEM_TREE_AXE_IRON = 10001; // 10257
+//	final public static int ITEM_TREE_AXE_DIAMOND = 10002;
+	final public static int ITEM_LEAVES_CUTTER = 10003; // 10259
 	
 	// creative tabs
 	final public static MCGEEKCreativeTabs TAB_LUCKY = new MCGEEKCreativeTabs("lucky", R.BLOCK_CLOVER_ID);

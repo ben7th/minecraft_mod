@@ -4,6 +4,7 @@ import mindpin.blocks.BlockClover;
 import mindpin.blocks.BlockLucky;
 import mindpin.generators.GeneratorBlockClover;
 import mindpin.generators.GeneratorBlockLucky;
+import mindpin.items.ItemLeavesCutter;
 import mindpin.items.ItemTreeAxeIron;
 import mindpin.proxy.Proxy;
 import mindpin.proxy.R;
@@ -33,6 +34,7 @@ public class MCGEEK {
 	public static Block block_clover = new BlockClover(R.BLOCK_CLOVER_ID);
 	
 	public static Item item_board_axe_iron = new ItemTreeAxeIron(R.ITEM_TREE_AXE_IRON);
+	public static Item item_leaves_cutter = new ItemLeavesCutter(R.ITEM_LEAVES_CUTTER);
 	
 	@Init
 	public void init(@SuppressWarnings("unused") FMLInitializationEvent event) {
@@ -47,6 +49,8 @@ public class MCGEEK {
 		// 工具是人类前进的基础
 		ModUtils.init_mod_item(item_board_axe_iron, "item_tree_axe_iron", "铁制砍树斧");
 		((ItemTreeAxeIron) item_board_axe_iron).add_recipes();
+		ModUtils.init_mod_item(item_leaves_cutter, "item_leaves_cutter", "强力树叶剪");
+		((ItemLeavesCutter) item_leaves_cutter).add_recipes();
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());
