@@ -62,21 +62,20 @@ public class ItemLeavesCutter extends Item implements IhasRecipe {
 
 		MCGPosition this_pos = new MCGPosition(world, x, y, z);
 
-		List<MCGPosition> pos_around = this_pos.get_positions_around();
-
-		int cut_count = 0;
-		for (MCGPosition pos : pos_around) {
-			if (pos.get_block_id() == Block.leaves.blockID) {
-				cut_count++;
-				_remove_block_and_make_drop(pos, item_stack);
+		if (this_pos.get_block_id() == Block.leaves.blockID) {
+			
+			List<MCGPosition> pos_around = this_pos.get_positions_around();
+			
+			for (MCGPosition pos : pos_around) {
+				if (pos.get_block_id() == Block.leaves.blockID) {
+					_remove_block_and_make_drop(pos, item_stack);
+				}
 			}
-		}
-
-		if (cut_count > 0) {
+	
 			item_stack.damageItem(1, player);
 			player.addStat(StatList.mineBlockStatArray[Block.leaves.blockID], 1);
 		}
-
+		
 		return false;
 	}
 

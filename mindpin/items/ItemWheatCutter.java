@@ -43,28 +43,32 @@ public class ItemWheatCutter extends ItemHoe implements IhasRecipe {
 	public boolean onBlockStartBreak(ItemStack item_stack, int x, int y, int z,
 			EntityPlayer player) {
 		World world = player.worldObj;
-		
+
 		if (world.isRemote)
 			return false;
-		
+
 		MCGPosition this_pos = new MCGPosition(world, x, y, z);
-		List<MCGPosition> pos_around = this_pos.get_horizontal_positions_around();
-		
-		int cut_count = 0;
-		for(MCGPosition pos : pos_around) {
-			int block_id = pos.get_block_id();
-			int meta_data = pos.get_block_meta_data();
-			if(block_id == Block.crops.blockID && meta_data == CROPS_MAX_META) {
-				cut_count++;
-				pos.drop_self();
+
+		if (_is_full_blown_wheat(this_pos)) {
+
+			List<MCGPosition> pos_around = this_pos
+					.get_horizontal_positions_around();
+
+			for (MCGPosition pos : pos_around) {
+				if (_is_full_blown_wheat(pos)) {
+					pos.drop_self();
+				}
 			}
-		}
-		
-		if (cut_count > 0) {
+
 			item_stack.damageItem(1, player);
 		}
-		
+
 		return false;
+	}
+	
+	private boolean _is_full_blown_wheat(MCGPosition pos) {
+		return pos.get_block_id() == Block.crops.blockID
+				&& pos.get_block_meta_data() == CROPS_MAX_META;
 	}
 	
 	@Override
