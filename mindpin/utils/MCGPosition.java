@@ -1,5 +1,8 @@
 package mindpin.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -55,5 +58,20 @@ public class MCGPosition {
 		
 		delete_block();
 		drop_block_as_item(id, meta);
+	}
+	
+	// 获取当前坐标周围的坐标，和当前坐标一起返回，共27个
+	public List<MCGPosition> get_positions_around() {
+		List<MCGPosition> re = new ArrayList<MCGPosition>();
+		for (int i = -1; i <= 1; i++) {
+			for (int j = -1; j <= 1; j++) {
+				for (int k = -1; k <= 1; k++) {
+					MCGPosition pos = new MCGPosition(world, x + i, y + j, z
+							+ k);
+					re.add(pos);
+				}
+			}
+		}
+		return re;
 	}
 }

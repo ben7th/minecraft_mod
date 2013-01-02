@@ -7,6 +7,7 @@ import java.util.Random;
 import mindpin.blocks.IhasRecipe;
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
+import mindpin.utils.MCGPosition;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -27,7 +28,7 @@ public class ItemLeavesCutter extends Item implements IhasRecipe {
 		setTextureFile(ClientProxy.ITEMS_PNG_PATH);
 		setIconCoord(2, 1);
 		setCreativeTab(R.TAB_PRACTICE);
-		
+
 		this.setMaxStackSize(1);
 		this.setMaxDamage(1190); // 5倍于一般剪刀
 	}
@@ -59,43 +60,56 @@ public class ItemLeavesCutter extends Item implements IhasRecipe {
 		if (world.isRemote)
 			return false;
 
-		int block_id = world.getBlockId(x, y, z);
+		MCGPosition this_pos = new MCGPosition(world, x, y, z);
 
-		if (block_id == Block.leaves.blockID) {
-			ArrayList<ItemStack> drops = Block.leaves.onSheared(item_stack,
-					world, x, y, z, EnchantmentHelper.getEnchantmentLevel(
-							Enchantment.fortune.effectId, item_stack));
-			Random rand = new Random();
-			for (ItemStack stack : drops) {
-                float f = 0.7F;
-                double dx = (rand.nextFloat() * f) + (1.0F - f) * 0.5D;
-                double dy = (rand.nextFloat() * f) + (1.0F - f) * 0.5D;
-                double dz = (rand.nextFloat() * f) + (1.0F - f) * 0.5D;
-                
-                EntityItem entity_item = new EntityItem(player.worldObj, x + dx, y + dy, z + dz, stack);
-                entity_item.delayBeforeCanPickup = 10;
-                world.spawnEntityInWorld(entity_item);
+		List<MCGPosition> pos_around = this_pos.get_positions_around();
+
+		int cut_count = 0;
+		for (MCGPosition pos : pos_around) {
+			if (pos.get_block_id() == Block.leaves.blockID) {
+				cut_count++;
+				_remove_block_and_make_drop(pos, item_stack);
 			}
-			
+		}
+
+		if (cut_count > 0) {
 			item_stack.damageItem(1, player);
-			player.addStat(StatList.mineBlockStatArray[block_id], 1);
+			player.addStat(StatList.mineBlockStatArray[Block.leaves.blockID], 1);
 		}
 
 		return false;
 	}
 
+	private void _remove_block_and_make_drop(MCGPosition pos,
+			ItemStack item_stack) {
+		World world = pos.world;
+
+		ArrayList<ItemStack> drops = Block.leaves.onSheared(item_stack, world,
+				pos.x, pos.y, pos.z, EnchantmentHelper.getEnchantmentLevel(
+						Enchantment.fortune.effectId, item_stack));
+		Random rand = new Random();
+		for (ItemStack stack : drops) {
+			float f = 0.7F;
+			double dx = (rand.nextFloat() * f) + (1.0F - f) * 0.5D;
+			double dy = (rand.nextFloat() * f) + (1.0F - f) * 0.5D;
+			double dz = (rand.nextFloat() * f) + (1.0F - f) * 0.5D;
+
+			EntityItem entity_item = new EntityItem(world, pos.x + dx, pos.y
+					+ dy, pos.z + dz, stack);
+			entity_item.delayBeforeCanPickup = 10;
+			world.spawnEntityInWorld(entity_item);
+		}
+		pos.delete_block();
+	}
+
 	@Override
 	public List<Object[]> recipe_objects() {
 		List<Object[]> res = new ArrayList<Object[]>();
-		
-		Object[] o = new Object[] {
-			"B B",
-			" A ",
-			"A A",
-			Character.valueOf('B'), Item.ingotIron,
-			Character.valueOf('A'), Item.stick
-		};
-		
+
+		Object[] o = new Object[] { "B B", " A ", "A A",
+				Character.valueOf('B'), Item.ingotIron, Character.valueOf('A'),
+				Item.stick };
+
 		res.add(o);
 		return res;
 	}
@@ -104,8 +118,8 @@ public class ItemLeavesCutter extends Item implements IhasRecipe {
 	public void add_recipes() {
 		ItemStack is = new ItemStack(this);
 		List<Object[]> objs = recipe_objects();
-		
-		for(Object[] o : objs) {
+
+		for (Object[] o : objs) {
 			ModLoader.addRecipe(is, o);
 		}
 	}
