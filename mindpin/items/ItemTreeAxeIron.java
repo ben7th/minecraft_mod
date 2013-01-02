@@ -29,7 +29,8 @@ public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 			"砍倒了一棵树，毁掉了小鸟的家园！", 
 			"树上没有猴儿……砍个什么劲呀……", 
 			"劳动人民砍树忙 @_@",
-			"呢棵树太乞人憎咗，仆街呀！！" 
+			"呢棵树太乞人憎咗，仆街呀！！",
+			"树没了，树上的小鸟飞走了，向没有绿色猪头的地方飞去……",
 		};
 
 	public ItemTreeAxeIron(int item_id) {

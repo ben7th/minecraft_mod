@@ -6,6 +6,7 @@ import mindpin.generators.GeneratorBlockClover;
 import mindpin.generators.GeneratorBlockLucky;
 import mindpin.items.ItemLeavesCutter;
 import mindpin.items.ItemTreeAxeIron;
+import mindpin.items.ItemWheatCutter;
 import mindpin.proxy.Proxy;
 import mindpin.proxy.R;
 import mindpin.utils.ModUtils;
@@ -35,6 +36,7 @@ public class MCGEEK {
 	
 	public static Item item_board_axe_iron = new ItemTreeAxeIron(R.ITEM_TREE_AXE_IRON);
 	public static Item item_leaves_cutter = new ItemLeavesCutter(R.ITEM_LEAVES_CUTTER);
+	public static Item item_wheat_cutter = new ItemWheatCutter(R.ITEM_WHEAT_CUTTER);
 	
 	@Init
 	public void init(@SuppressWarnings("unused") FMLInitializationEvent event) {
@@ -43,14 +45,16 @@ public class MCGEEK {
 		LanguageRegistry.instance().addStringLocalization(R.TAB_PRACTICE.get_label_name(), "实践");
 		
 		// 那些年，我们一起堆的方块
-		ModUtils.init_mod_block(block_lucky, "block_lucky", "幸运方块");
-		ModUtils.init_mod_block(block_clover, "block_clover", "四叶草");
+		ModUtils.init_mod_block(block_lucky, "block_lucky", "G-幸运方块");
+		ModUtils.init_mod_block(block_clover, "block_clover", "G-四叶草");
 		
 		// 工具是人类前进的基础
-		ModUtils.init_mod_item(item_board_axe_iron, "item_tree_axe_iron", "铁制砍树斧");
+		ModUtils.init_mod_item(item_board_axe_iron, "item_tree_axe_iron", "G-铁制砍树斧");
 		((ItemTreeAxeIron) item_board_axe_iron).add_recipes();
-		ModUtils.init_mod_item(item_leaves_cutter, "item_leaves_cutter", "强力树叶剪");
+		ModUtils.init_mod_item(item_leaves_cutter, "item_leaves_cutter", "G-强力树叶剪");
 		((ItemLeavesCutter) item_leaves_cutter).add_recipes();
+		ModUtils.init_mod_item(item_wheat_cutter, "item_wheat_cutter", "G-两用镰刀");
+		((ItemWheatCutter) item_wheat_cutter).add_recipes();
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());

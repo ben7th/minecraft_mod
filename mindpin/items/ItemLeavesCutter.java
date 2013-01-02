@@ -106,9 +106,13 @@ public class ItemLeavesCutter extends Item implements IhasRecipe {
 	public List<Object[]> recipe_objects() {
 		List<Object[]> res = new ArrayList<Object[]>();
 
-		Object[] o = new Object[] { "B B", " A ", "A A",
-				Character.valueOf('B'), Item.ingotIron, Character.valueOf('A'),
-				Item.stick };
+		Object[] o = new Object[] { 
+			"B B", 
+			" A ", 
+			"A A",
+			Character.valueOf('B'), Item.ingotIron, 
+			Character.valueOf('A'), Item.stick 
+		};
 
 		res.add(o);
 		return res;
