@@ -30,6 +30,8 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 			Block.oreRedstone
 		};
 	
+	final static int ORE_SEEK_RADIUS = 3;
+	
 	public ItemCloverBookmarkOfOre(int item_id) {
 		super(item_id);
 		
@@ -58,12 +60,13 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		
 		if (world.isRemote) return false;
 		
-		-- item_stack.stackSize;
-		
 		Random rand = new Random();
-		int f = rand.nextInt(4);
+		int f = rand.nextInt(5);
 		if (f == 1) {
-			// 25% 几率，死亡
+			// 20% 几率，死亡
+			
+			-- item_stack.stackSize;
+			
 			player.attackEntityFrom(new ItemLuckyBookmarkDamage(), 9999);
 			System.out.println("四叶草书笺：矿藏");
 			return false;
@@ -72,9 +75,9 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		// face 0-下表面 1-上表面 2-北 3-南 4-西 5-东
 		// off 鼠标点击处 距离方块 东-南-上 角的位置
 
-		List<MCGPosition> ore_pos_arr = new ArrayList<MCGPosition>();		
-		for (int dx = -8; dx <= 8; dx++) {
-			for (int dz = -8; dz <= 8; dz++) {
+		List<MCGPosition> ore_pos_arr = new ArrayList<MCGPosition>();
+		for (int dx = -ORE_SEEK_RADIUS; dx <= ORE_SEEK_RADIUS; dx++) {
+			for (int dz = -ORE_SEEK_RADIUS; dz <= ORE_SEEK_RADIUS; dz++) {
 				for (int new_y = 0; new_y <= y; new_y++) {
 					int new_x = x + dx;
 					int new_z = z + dz;
@@ -88,16 +91,18 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		}
 		
 		if (ore_pos_arr.size() > 0) {
-			ModUtils.send_public_notice(world, "§6四叶草书笺散发着光芒…… " + player.getEntityName() + " 附近的矿石穿越地面，高高飞起！");
-			
+			-- item_stack.stackSize;
+			ModUtils.send_public_notice(world, "§6四叶草书笺散发着光芒…… " + player.getEntityName() + " 周围地下的矿石穿越地面，高高飞起！");
 			
 			for (MCGPosition ore_pos : ore_pos_arr) {
-				int drop_x = x + rand.nextInt(6) - rand.nextInt(6);
+				int drop_x = x + rand.nextInt(3) - rand.nextInt(3);
 				int drop_y = y + 8 + rand.nextInt(5);
-				int drop_z = z + rand.nextInt(6) - rand.nextInt(6);
+				int drop_z = z + rand.nextInt(3) - rand.nextInt(3);
 				
 				ore_pos.drop_self_at(drop_x, drop_y, drop_z);
 			}
+		} else {
+			ModUtils.send_msg_to_player(world, player, "四叶草书笺没有反应，这周围的地下已经没有矿藏了。");
 		}
 		
 		return false;
@@ -110,12 +115,13 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		Object[] o = new Object[] {
 			"HZH",
 			"TSQ",
-			"HJH",
+			"MJM",
 			Character.valueOf('H'), Item.redstone,
-			Character.valueOf('Z'), Block.blockDiamond,
-			Character.valueOf('T'), Block.blockSteel,
-			Character.valueOf('Q'), Block.blockLapis,
-			Character.valueOf('J'), Block.blockGold,
+			Character.valueOf('Z'), Item.diamond,
+			Character.valueOf('T'), Item.ingotIron,
+			Character.valueOf('Q'), new ItemStack(Item.dyePowder, 1, 4),
+			Character.valueOf('J'), Item.ingotGold,
+			Character.valueOf('M'), Item.coal,
 			Character.valueOf('S'), MCGEEK.item_clover_bookmark,
 		};
 		
@@ -141,7 +147,7 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		
 		@Override
 		public String getDeathMessage(EntityPlayer player) {
-			return "§c四叶草书笺化成了飞灰…… " + player.getEntityName() + " 被地下矿道徘徊的无名怨魂拉向了死亡的深渊……"; // 
+			return "§c四叶草书笺化成了飞灰…… " + player.getEntityName() + " 被地下矿道徘徊的无名怨魂拉进了死亡的深渊……"; // 
 		}
 		
 	}
