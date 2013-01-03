@@ -7,6 +7,8 @@ import mindpin.generators.GeneratorBlockLucky;
 import mindpin.items.ItemLeavesCutter;
 import mindpin.items.ItemTreeAxeIron;
 import mindpin.items.ItemWheatCutter;
+import mindpin.items.luckybookmarks.ItemCloverBookmark;
+import mindpin.items.luckybookmarks.ItemCloverBookmarkOfOre;
 import mindpin.proxy.Proxy;
 import mindpin.proxy.R;
 import mindpin.utils.ModUtils;
@@ -38,6 +40,9 @@ public class MCGEEK {
 	public static Item item_leaves_cutter = new ItemLeavesCutter(R.ITEM_LEAVES_CUTTER);
 	public static Item item_wheat_cutter = new ItemWheatCutter(R.ITEM_WHEAT_CUTTER);
 	
+	public static Item item_clover_bookmark = new ItemCloverBookmark(R.ITEM_CLOVER_BOOKMARK);
+	public static Item item_clover_bookmark_of_ore = new ItemCloverBookmarkOfOre(R.ITEM_CLOVER_BOOKMARK_OF_ORE);
+	
 	@Init
 	public void init(@SuppressWarnings("unused") FMLInitializationEvent event) {
 		// 标签
@@ -55,6 +60,11 @@ public class MCGEEK {
 		((ItemLeavesCutter) item_leaves_cutter).add_recipes();
 		ModUtils.init_mod_item(item_wheat_cutter, "item_wheat_cutter", "G-两用镰刀");
 		((ItemWheatCutter) item_wheat_cutter).add_recipes();
+		
+		ModUtils.init_mod_item(item_clover_bookmark, "item_lucky_bookmark", "G-四叶草书笺");
+		((ItemCloverBookmark) item_clover_bookmark).add_recipes();
+		ModUtils.init_mod_item(item_clover_bookmark_of_ore, "item_lucky_bookmark_of_ore", "G-四叶草书笺：矿藏");
+		((ItemCloverBookmarkOfOre) item_clover_bookmark_of_ore).add_recipes();
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());

@@ -13,6 +13,14 @@ public class R {
 	final public static int ITEM_LEAVES_CUTTER = 10003; // 10259
 //  final public static int xxx = 10004;
 	final public static int ITEM_WHEAT_CUTTER = 10005; // 10261
+//  final public static int xxx = 10006
+//	10007
+//	10008
+//	10009
+//	10010
+	
+	final public static int ITEM_CLOVER_BOOKMARK = 10011;
+	final public static int ITEM_CLOVER_BOOKMARK_OF_ORE = 10012; // 10268
 	
 	// creative tabs
 	final public static MCGEEKCreativeTabs TAB_LUCKY = new MCGEEKCreativeTabs("lucky", R.BLOCK_CLOVER_ID);

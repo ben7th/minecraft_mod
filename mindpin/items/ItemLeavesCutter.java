@@ -98,7 +98,8 @@ public class ItemLeavesCutter extends Item implements IhasRecipe {
 			entity_item.delayBeforeCanPickup = 10;
 			world.spawnEntityInWorld(entity_item);
 		}
-		pos.delete_block();
+		pos.delete_block_with_notifyBlocksOfNeighborChange(); 
+		// ben7th 20130103 修正附着在叶子上的藤蔓和雪不掉落的BUG
 	}
 
 	@Override
