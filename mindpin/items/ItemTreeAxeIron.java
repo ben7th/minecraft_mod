@@ -9,7 +9,7 @@ import mindpin.blocks.IhasRecipe;
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
 import mindpin.utils.MCGPosition;
-import mindpin.utils.ModUtils;
+import mindpin.utils.MCGUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
@@ -85,7 +85,7 @@ public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 				.get_connected_wood_blocks();
 
 		if (block_pos_arr.size() > 10) {
-			ModUtils.send_msg_to_player(world, player, "这棵树的体积超过了10个木块，一斧头貌似砍不掉");
+			MCGUtils.send_msg_to_player(world, player, "这棵树的体积超过了10个木块，一斧头貌似砍不掉");
 			return false;
 		}
 
@@ -102,7 +102,7 @@ public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 
 	private void _send_public_notice(World world, EntityPlayer player) {
 		String msg = TREE_DOWN_MSGS[new Random().nextInt(TREE_DOWN_MSGS.length)];
-		ModUtils.send_public_notice(world, "§6" + player.getEntityName() + " §6" + msg);
+		MCGUtils.send_public_notice(world, "§6" + player.getEntityName() + " §6" + msg);
 	}
 
 	static class TAPosition extends MCGPosition {

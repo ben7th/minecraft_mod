@@ -8,8 +8,10 @@ import mindpin.MCGEEK;
 import mindpin.blocks.IhasRecipe;
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
+import mindpin.random.MCGRandomHandler;
+import mindpin.random.MCGRandomSwitcher;
 import mindpin.utils.MCGPosition;
-import mindpin.utils.ModUtils;
+import mindpin.utils.MCGUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -44,70 +46,75 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack item_stack, EntityPlayer player,
-			World world, int x, int y, int z, int face, float x_off,
+	public boolean onItemUse(final ItemStack item_stack, final EntityPlayer player,
+			final World world, final int x, final int y, final int z, int face, float x_off,
 			float y_off, float z_off) {
-		
-		if (world.isRemote) return false;
-		
-		Random rand = new Random();
-		int f = rand.nextInt(100);
-		
-		/**
-		 * 四叶草魔符：矿石的设定
-		 * 5% 几率，死亡
-		 * 5% 几率，所有的红石和青金石变为钻石
-		 * 1% 几率，所有的矿石变为钻石
-		 */
-		
-		if (f < 5) {
-			// 0 ~ 4
-			// 5% 几率，死亡
-			
-			-- item_stack.stackSize;
-			
-			player.attackEntityFrom(new ItemLuckyBookmarkDamage(), 9999);
-			System.out.println("触发死亡：四叶草魔符：矿石");
-			return false;
-		}
-		
-		// f >= 20
 		
 		// face 0-下表面 1-上表面 2-北 3-南 4-西 5-东
 		// off 鼠标点击处 距离方块 东-南-上 角的位置
 		
-		List<MCGPosition> ore_pos_arr = _get_ore_pos_arr(world, x, y, z);
+		if (world.isRemote) return false;
 		
-		if (ore_pos_arr.size() > 32) {
-			--item_stack.stackSize;
-			
-			if (f < 10) {
-				// 5 ~ 9, 5% 几率，双倍 
-				ModUtils.send_public_notice(world, "§6四叶草魔符变得更加明亮…… " + player.getEntityName() + " 周围地下的红石与青金石都变成了钻石！");
-			} else if (f < 11) {
-				// 10 1% 几率，四倍
-				ModUtils.send_public_notice(world, "§6四叶草魔符发出耀眼光辉…… " + player.getEntityName() + " 周围地下全部的矿石都变成了钻石！！");
-			} else {
-				ModUtils.send_public_notice(world, "§6四叶草魔符散发着柔光…… " + player.getEntityName() + " 周围地下的矿石飞出地面，从半空掉落");	
+		final List<MCGPosition> ore_pos_arr = _get_ore_pos_arr(world, x, y, z);
+		final MCGPosition this_pos = new MCGPosition(world, x, y, z);
+		
+		// 至少能获得半组矿石才行,
+		// 为了概率更加合理 0.0.6r2 中，把这个判定移到死亡判定之前了
+		if (ore_pos_arr.size() < 32) {
+			MCGUtils.send_msg_to_player(world, player, "四叶草神符变得暗淡，周围的地下矿藏已经几近枯竭……");
+			return false;
+		}
+		
+		--item_stack.stackSize;
+		
+		/**
+		 * 四叶草神符：矿石的设定
+		 * 5% 几率，死亡
+		 * 5% 几率，所有的红石和青金石变为钻石
+		 * 1% 几率，所有的矿石变为钻石
+		 * 89% 几率，正常掉落
+		 */
+		
+		MCGRandomSwitcher rs = new MCGRandomSwitcher(100, "四叶草神符：矿石");
+		
+		rs.add_handler(new MCGRandomHandler(5, "死亡") {
+			@Override
+			public void handle() {
+				player.attackEntityFrom(new ItemLuckyBookmarkDamage(), 9999);
 			}
-			
-			for (MCGPosition ore_pos : ore_pos_arr) {
-				int drop_x = x + rand.nextInt(3) - rand.nextInt(3);
-				int drop_y = y + rand.nextInt(3) + rand.nextInt(3);
-				int drop_z = z + rand.nextInt(3) - rand.nextInt(3);
-				
-				if (f < 10) {
-					_drop_change_redstone_to_diamond(ore_pos, drop_x, drop_y, drop_z);
-				} else if (f < 11) {
-					_drop_all_as_diamond(ore_pos, drop_x, drop_y, drop_z);
-				} else {
-					_drop_normal(ore_pos, drop_x, drop_y, drop_z);
+		});
+		
+		rs.add_handler(new MCGRandomHandler(5, "钻石增多") {
+			@Override
+			public void handle() {
+				MCGUtils.send_public_notice(world, "§6四叶草神符变得更加明亮…… " + player.getEntityName() + " 周围地下的红石与青金石都变成了钻石！");
+				for (MCGPosition ore_pos : ore_pos_arr) {
+					_drop_more_diamond(ore_pos, _get_item_stack_drop_pos(this_pos));
 				}
 			}
-				
-		} else {
-			ModUtils.send_msg_to_player(world, player, "四叶草书签变得暗淡，周围的地下矿藏已经几近枯竭……");
-		}
+		});
+		
+		rs.add_handler(new MCGRandomHandler(1, "钻石极多") {
+			@Override
+			public void handle() {
+				MCGUtils.send_public_notice(world, "§6四叶草神符发出耀眼光辉…… " + player.getEntityName() + " 周围地下全部的矿石都变成了钻石！！");
+				for (MCGPosition ore_pos : ore_pos_arr) {
+					_drop_most_diamond(ore_pos, _get_item_stack_drop_pos(this_pos));
+				}
+			}
+		});
+		
+		rs.add_handler(new MCGRandomHandler(89, "正常掉落") {
+			@Override
+			public void handle() {
+				MCGUtils.send_public_notice(world, "§6四叶草神符散发着柔光…… " + player.getEntityName() + " 周围地下的矿石飞出地面，从半空散落");	
+				for (MCGPosition ore_pos : ore_pos_arr) {
+					_drop_normal(ore_pos, _get_item_stack_drop_pos(this_pos));
+				}
+			}
+		});
+		
+		rs.run();
 		
 		return false;
 	}
@@ -130,25 +137,34 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		return re;
 	}
 	
-	private void _drop_normal(MCGPosition pos, int drop_x, int drop_y, int drop_z) {
-		pos.drop_self_at(drop_x, drop_y, drop_z);
+	private MCGPosition _get_item_stack_drop_pos(MCGPosition pos) {
+		Random rand = new Random();
+		int drop_x = pos.x + rand.nextInt(3) - rand.nextInt(3);
+		int drop_y = pos.y + rand.nextInt(3) + rand.nextInt(3);
+		int drop_z = pos.z + rand.nextInt(3) - rand.nextInt(3);
+		
+		return new MCGPosition(pos.world, drop_x, drop_y, drop_z);
 	}
 	
-	private void _drop_change_redstone_to_diamond(MCGPosition pos, int drop_x, int drop_y, int drop_z) {
+	private void _drop_normal(MCGPosition pos, MCGPosition drop_pos) {
+		pos.drop_self_at(drop_pos.x, drop_pos.y, drop_pos.z);
+	}
+	
+	private void _drop_more_diamond(MCGPosition pos, MCGPosition drop_pos) {
 		Block[] block_kinds = new Block[] {
 			Block.oreRedstone,
 			Block.oreLapis
 		};
 		
 		if (pos.is_of_kind(block_kinds)) {
-			pos.drop_self_at_as(drop_x, drop_y, drop_z, Block.oreDiamond);
+			pos.drop_self_at_as(drop_pos.x, drop_pos.y, drop_pos.z, Block.oreDiamond);
 		} else {
-			pos.drop_self_at(drop_x, drop_y, drop_z);
+			pos.drop_self_at(drop_pos.x, drop_pos.y, drop_pos.z);
 		}
 	}
 	
-	private void _drop_all_as_diamond(MCGPosition pos, int drop_x, int drop_y, int drop_z) {
-		pos.drop_self_at_as(drop_x, drop_y, drop_z, Block.oreDiamond);
+	private void _drop_most_diamond(MCGPosition pos, MCGPosition drop_pos) {
+		pos.drop_self_at_as(drop_pos.x, drop_pos.y, drop_pos.z, Block.oreDiamond);
 	}
 	
 	@Override

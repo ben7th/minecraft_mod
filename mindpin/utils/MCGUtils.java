@@ -7,7 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
 
-public class ModUtils {
+public class MCGUtils {
 
 	/**
 	 * 在 MOD 里注册一个方块
