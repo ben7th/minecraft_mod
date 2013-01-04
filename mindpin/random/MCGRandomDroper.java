@@ -22,7 +22,11 @@ public class MCGRandomDroper {
 		return this;
 	}
 	
-	public ArrayList<ItemStack> get_drop() {
+	public ItemStack get_drop() {
+		return get_drop_arraylist().get(0);
+	}
+	
+	public ArrayList<ItemStack> get_drop_arraylist() {
 		final ArrayList<ItemStack> re = new ArrayList<ItemStack>();
 		
 		MCGRandomSwitcher rs = new MCGRandomSwitcher(label + "：掉落");

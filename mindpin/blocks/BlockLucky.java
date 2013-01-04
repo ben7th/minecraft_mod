@@ -1,14 +1,13 @@
 package mindpin.blocks;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-import mindpin.MCGEEK;
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
 import mindpin.random.MCGRandomDroper;
 import mindpin.random.MCGRandomHandler;
 import mindpin.random.MCGRandomSwitcher;
+import mindpin.utils.MCGDeath;
 import mindpin.utils.MCGPosition;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -16,7 +15,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class BlockLucky extends Block {
@@ -51,7 +49,7 @@ public class BlockLucky extends Block {
 		rs.add_handler(new MCGRandomHandler(1, "诅咒死亡") {
 			@Override
 			public void handle() {
-				player.attackEntityFrom(new BlockLuckyDamage(), 9999);
+				MCGDeath.kill(player, "诅咒");
 				this_pos.delete_block_with_notifyBlocksOfNeighborChange();
 			}
 		});
@@ -61,7 +59,7 @@ public class BlockLucky extends Block {
 			public void handle() {
 				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系，玩家是必死的
 				// 但是应该会伤及无辜
-				player.attackEntityFrom(new BlockLuckyDamage().set_explode(), 9999);
+				MCGDeath.kill(player, "爆炸");
 				world.createExplosion(player, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
 				this_pos.delete_block_with_notifyBlocksOfNeighborChange();
 			}
@@ -70,7 +68,7 @@ public class BlockLucky extends Block {
 		rs.add_handler(new MCGRandomHandler(2, "随机掉落") {
 			@Override
 			public void handle() {
-				this_pos.drop_self_at_as(x, y, z, MCGEEK.block_lucky);
+				BlockLucky.this.dropBlockAsItem_do(world, x, y, z, dropper.get_drop());
 			}
 		});
 		
@@ -95,9 +93,8 @@ public class BlockLucky extends Block {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y,
-			int z, int metadata, int fortune) {
-		return dropper.get_drop();
+	public int idDropped(int par1, Random par2Random, int par3) {
+		return 0; // 方块本身不掉落任何东西，处理掉落时，采用其他方法
 	}
 	
 	// ----------------------------------------
@@ -116,45 +113,45 @@ public class BlockLucky extends Block {
 
 	// -------------------------------------------
 
-	private static class BlockLuckyDamage extends DamageSource {
-		private boolean explode = false;
-		
-		final private static String[] EXPLODE_MSGS = new String[] {
-			"被幸运方块炸死了！",
-			"像烟花般绽放",
-			"碉堡了",
-			"懂得了爆炸即艺术",
-			"被炸得七零八落"
-		};
-		
-		final private static String[] MSGS = new String[] {
-			"你若安好，便是晴天",
-			"啊朋友再见，再见吧再见吧再见吧……",
-			"神秘地蒸发了",
-			"啊~~~~~~！",
-			"听到一个声音说：“你已经死了。”"
-		};
-
-		protected BlockLuckyDamage() {
-			super("block_lucky_damage");
-		}
-
-		BlockLuckyDamage set_explode() {
-			this.explode = true;
-			return this;
-		}
-
-		@Override
-		public String getDeathMessage(EntityPlayer player) {
-			if (this.explode) {
-				return "§c" + player.getEntityName() + " §c" + _get_random_str(EXPLODE_MSGS);
-			}
-
-			return "§c" + player.getEntityName() + " §c" + _get_random_str(MSGS); // 
-		}
-		
-		private String _get_random_str(String[] msgs){
-			return msgs[new Random().nextInt(msgs.length)];
-		}
-	}
+//	private static class BlockLuckyDamage extends DamageSource {
+//		private boolean explode = false;
+//		
+//		final private static String[] EXPLODE_MSGS = new String[] {
+//			"被幸运方块炸死了！",
+//			"像烟花般绽放",
+//			"碉堡了",
+//			"懂得了爆炸即艺术",
+//			"被炸得七零八落"
+//		};
+//		
+//		final private static String[] MSGS = new String[] {
+//			"你若安好，便是晴天",
+//			"啊朋友再见，再见吧再见吧再见吧……",
+//			"神秘地蒸发了",
+//			"啊~~~~~~！",
+//			"听到一个声音说：“你已经死了。”"
+//		};
+//
+//		protected BlockLuckyDamage() {
+//			super("block_lucky_damage");
+//		}
+//
+//		BlockLuckyDamage set_explode() {
+//			this.explode = true;
+//			return this;
+//		}
+//
+//		@Override
+//		public String getDeathMessage(EntityPlayer player) {
+//			if (this.explode) {
+//				return "§c" + player.getEntityName() + " §c" + _get_random_str(EXPLODE_MSGS);
+//			}
+//
+//			return "§c" + player.getEntityName() + " §c" + _get_random_str(MSGS); // 
+//		}
+//		
+//		private String _get_random_str(String[] msgs){
+//			return msgs[new Random().nextInt(msgs.length)];
+//		}
+//	}
 }

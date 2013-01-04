@@ -85,7 +85,7 @@ public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 				.get_connected_wood_blocks();
 
 		if (block_pos_arr.size() > 10) {
-			MCGUtils.send_msg_to_player(world, player, "这棵树的体积超过了10个木块，一斧头貌似砍不掉");
+			MCGUtils.send_msg_to_player(player, "这棵树的体积超过了10个木块，一斧头貌似砍不掉");
 			return false;
 		}
 

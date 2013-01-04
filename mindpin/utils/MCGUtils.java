@@ -33,8 +33,8 @@ public class MCGUtils {
 		}
 	}
 	
-	public static void send_msg_to_player(World world, EntityPlayer player, String string) {
-		if (!world.isRemote) {
+	public static void send_msg_to_player(EntityPlayer player, String string) {
+		if (!player.worldObj.isRemote) {
 			player.sendChatToPlayer(string);
 			// 似乎用 player.addChatMessage(""); 也可以，暂时没看出区别
 		}

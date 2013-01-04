@@ -61,7 +61,7 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		// 至少能获得半组矿石才行,
 		// 为了概率更加合理 0.0.6r2 中，把这个判定移到死亡判定之前了
 		if (ore_pos_arr.size() < 32) {
-			MCGUtils.send_msg_to_player(world, player, "四叶草神符变得暗淡，周围的地下矿藏已经几近枯竭……");
+			MCGUtils.send_msg_to_player(player, "四叶草神符变得暗淡，周围的地下矿藏已经几近枯竭……");
 			return false;
 		}
 		

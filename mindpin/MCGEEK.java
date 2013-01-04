@@ -23,7 +23,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "MCGEEK", name = "MCGEEK", version = "0.0.6r2")
+@Mod(modid = "MCGEEK", name = "MCGEEK", version = "0.0.6r3")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class MCGEEK {
 	
