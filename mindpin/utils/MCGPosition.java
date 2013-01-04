@@ -3,6 +3,7 @@ package mindpin.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import mindpin.proxy.R;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -76,6 +77,22 @@ public class MCGPosition {
 		delete_block_with_notifyBlocksOfNeighborChange();
 	}
 	
+	// 多倍掉落
+	public void drop_self_multiple_at(int drop_x, int drop_y, int drop_z, int multiple) {
+		int meta = get_block_meta_data();
+		for (int i = 0; i < multiple; i++) {
+			get_block_reg_instance().dropBlockAsItem(world, drop_x, drop_y,
+					drop_z, meta, 0);
+		}
+		delete_block_with_notifyBlocksOfNeighborChange();
+	}
+	
+	// 掉落为
+	public void drop_self_at_as(int drop_x, int drop_y, int drop_z, Block block) {
+		block.dropBlockAsItem(world, drop_x, drop_y, drop_z, 0, 0);
+		delete_block_with_notifyBlocksOfNeighborChange();
+	}
+	
 	// 方块判定函数
 	public boolean is_of_kind(Block[] block_kinds) {
 		int block_id = get_block_id();
@@ -83,6 +100,10 @@ public class MCGPosition {
 			if (block_id == block.blockID) return true;
 		}
 		return false;
+	}
+	
+	public boolean is_ore_block() {
+		return is_of_kind(R.ORE_BLOCK_KINDS);
 	}
 
 	

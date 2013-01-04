@@ -1,5 +1,6 @@
 package mindpin.proxy;
 
+import net.minecraft.block.Block;
 import mindpin.tabs.MCGEEKCreativeTabs;
 
 public class R {
@@ -29,4 +30,14 @@ public class R {
 	// render types
 	final public static int RENDER_TYPE_BLOCK_LUCKY = -501;
 	final public static int RENDER_TYPE_BLOCK_CLOVER = -502;
+	
+	final public static Block[] ORE_BLOCK_KINDS = new Block[] {
+		Block.oreCoal,
+		Block.oreIron,
+		Block.oreGold,
+		Block.oreDiamond,
+		Block.oreEmerald,
+		Block.oreLapis,
+		Block.oreRedstone
+	};
 }

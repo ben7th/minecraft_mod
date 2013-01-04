@@ -23,7 +23,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "MCGEEK", name = "MCGEEK", version = "0.0.6r1")
+@Mod(modid = "MCGEEK", name = "MCGEEK", version = "0.0.6r2")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class MCGEEK {
 	
@@ -61,9 +61,9 @@ public class MCGEEK {
 		ModUtils.init_mod_item(item_wheat_cutter, "item_wheat_cutter", "G-两用镰刀");
 		((ItemWheatCutter) item_wheat_cutter).add_recipes();
 		
-		ModUtils.init_mod_item(item_clover_bookmark, "item_lucky_bookmark", "G-四叶草书笺");
+		ModUtils.init_mod_item(item_clover_bookmark, "item_lucky_bookmark", "G-四叶草书签");
 		((ItemCloverBookmark) item_clover_bookmark).add_recipes();
-		ModUtils.init_mod_item(item_clover_bookmark_of_ore, "item_lucky_bookmark_of_ore", "G-四叶草书笺：矿藏");
+		ModUtils.init_mod_item(item_clover_bookmark_of_ore, "item_lucky_bookmark_of_ore", "G-四叶草魔符：矿石");
 		((ItemCloverBookmarkOfOre) item_clover_bookmark_of_ore).add_recipes();
 		
 		// 地形创造器

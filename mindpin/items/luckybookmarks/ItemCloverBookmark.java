@@ -34,11 +34,12 @@ public class ItemCloverBookmark extends Item implements IhasRecipe {
 		List<Object[]> res = new ArrayList<Object[]>();
 		
 		Object[] o = new Object[] {
-			"BBB",
-			"AAA",
-			"AAA",
-			Character.valueOf('B'), MCGEEK.block_clover,
-			Character.valueOf('A'), Item.paper,
+			"A",
+			"B",
+			"C",
+			Character.valueOf('A'), MCGEEK.block_clover,
+			Character.valueOf('B'), Item.silk,
+			Character.valueOf('C'), Item.paper,
 		};
 		
 		res.add(o);
