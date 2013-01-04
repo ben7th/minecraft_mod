@@ -13,12 +13,12 @@ import java.util.Random;
 public class MCGRandomSwitcher {
 	
 	private List<MCGRandomHandler> handlers; // 回调集合
-	private int total_rate; // 总概率分母
+	private int rate_sum; // 总概率分母
 	public String label;
 	
 	public MCGRandomSwitcher(int total_rate, String label) {
 		this.handlers = new ArrayList<MCGRandomHandler>();
-		this.total_rate = total_rate;
+		this.rate_sum = total_rate;
 		this.label = label;
 	}
 	
@@ -26,13 +26,25 @@ public class MCGRandomSwitcher {
 		this.handlers.add(handler);
 	}
 	
+	/**
+	 * 算法解说：
+	 * 例如， total_rate = 7
+	 * new Random().nextInt(total_rate) + 1; 的结果 会是 1, 2, 3, 4, 5, 6, 7
+	 * 
+	 * 回调 A.rate, B.rate, C.rate = 2, 3, 2
+	 * 随机结果 1, 2: 执行 A
+	 * 随机结果 3, 4, 5: 执行 B
+	 * 随机结果 6, 7: 执行 C
+	 * 
+	 * 则 ABC 的执行几率符合预期
+	 */
 	public void run() {		
-		int result_value = new Random().nextInt(total_rate);
+		int result_value = new Random().nextInt(rate_sum) + 1; // 1 ~ rate_sum
 		
 		for (MCGRandomHandler handler : handlers) {
 			result_value -= handler.rate;
 			if (result_value <= 0) {
-				System.out.println("概率触发：" + label + "," + handler.label + "," + handler.rate + "/" + total_rate);
+				System.out.println("概率触发：" + label + "," + handler.label + "," + handler.rate + "/" + rate_sum);
 				handler.handle();
 				return;
 			}

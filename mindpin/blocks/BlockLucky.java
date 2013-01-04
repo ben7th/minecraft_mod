@@ -1,13 +1,15 @@
 package mindpin.blocks;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
+import mindpin.MCGEEK;
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
+import mindpin.random.MCGRandomDroper;
 import mindpin.random.MCGRandomHandler;
 import mindpin.random.MCGRandomSwitcher;
+import mindpin.utils.MCGPosition;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -20,8 +22,7 @@ import net.minecraft.world.World;
 public class BlockLucky extends Block {
 	private static float EXPLOSION_RADIUS = 4.0f; // 爆炸半径，目前与TNT相等
 	
-	private List<BlockLuckyDrop> drop_list = new ArrayList<BlockLuckyDrop>();
-	private int rate_sum = 0;
+	private MCGRandomDroper dropper;
 
 	public BlockLucky(int par1) {
 		super(par1, 0, new Material(MapColor.stoneColor));
@@ -33,7 +34,7 @@ public class BlockLucky extends Block {
 		setResistance(10.0f);
 		setStepSound(soundStoneFootstep);
 
-		_init_drop_list();
+		_init_dropper();
 	}
 	
 	@Override
@@ -43,41 +44,39 @@ public class BlockLucky extends Block {
 		
 		if (world.isRemote) return re;
 		
+		final MCGPosition this_pos = new MCGPosition(world, x, y, z);
+		
 		MCGRandomSwitcher rs = new MCGRandomSwitcher(4, "幸运方块");
 		
-		rs.add_handler(new MCGRandomHandler(1, "诅咒死亡") {
+		rs.add_handler(new MCGRandomHandler(0, "诅咒死亡") {
 			@Override
 			public void handle() {
 				player.attackEntityFrom(new BlockLuckyDamage(), 9999);
+				this_pos.delete_block_with_notifyBlocksOfNeighborChange();
 			}
 		});
 		
-		rs.add_handler(new MCGRandomHandler(1, "爆炸死亡") {
+		rs.add_handler(new MCGRandomHandler(0, "爆炸死亡") {
 			@Override
 			public void handle() {
 				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系，玩家是必死的
 				// 但是应该会伤及无辜
 				player.attackEntityFrom(new BlockLuckyDamage().set_explode(), 9999);
 				world.createExplosion(player, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
+				this_pos.delete_block_with_notifyBlocksOfNeighborChange();
 			}
 		});
 		
-		rs.add_handler(new MCGRandomHandler(2, "随机掉落") {
+		rs.add_handler(new MCGRandomHandler(4, "随机掉落") {
 			@Override
 			public void handle() {
-				dropBlockAsItem_do(world, x, y, z, _get_drop_item_stack());
+				this_pos.drop_self_at_as(x, y, z, MCGEEK.block_lucky);
 			}
 		});
 		
 		rs.run();
 		
 		return re;
-	}
-	
-	@Override
-	public int idDropped(int par1, Random par2Random, int par3) {
-		// 掉落判定发生在敲碎方块时，因此不通过正常途径产生掉落，这里返回 0
-		return 0;
 	}
 	
 	@Override
@@ -95,66 +94,27 @@ public class BlockLucky extends Block {
 		return R.RENDER_TYPE_BLOCK_LUCKY;
 	}
 
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y,
+			int z, int metadata, int fortune) {
+		return dropper.get_drop();
+	}
+	
 	// ----------------------------------------
 	
 	/**
 	 * 开始设定了比较复杂的掉落列表在这里，后来觉得还是简单一些好，因为死亡率实在是太高了
 	 * 随着设定丰富慢慢改吧
 	 */
-	private void _init_drop_list() {
-		_add_drop(new ItemStack(Block.blockDiamond), 5); 	// 钻石块
-		_add_drop(new ItemStack(Block.enderChest), 5); 		// 末影箱
-		_add_drop(new ItemStack(Item.swordDiamond), 50);	// 钻石剑
-		_add_drop(new ItemStack(Item.diamond), 100); 		// 钻石
-	}
-
-	private void _add_drop(ItemStack item_stack, int rate) {
-		drop_list.add(new BlockLuckyDrop(item_stack, rate));
-		rate_sum += rate;
-	}
-
-	/**
-	 * 用来计算应该掉落什么物品
-	 * 应该保证每个物品的掉落符合设置的随机值
-	 * 例如设置的随机值为：
-	 * 		金 2
-	 * 		煤 3
-	 * 		铁 2
-	 * 
-	 * rate_sum = 2 + 3 + 2 = 7，于是
-	 * drop_value 会随机产生为 1, 2, 3, 4, 5, 6, 7 中某个值
-	 * 当值为：
-	 * 		1, 2 时，掉落为 金
-	 * 		3, 4, 5 时，掉落为 煤
-	 * 		5, 6 时，掉落为 铁
-	 * 
-	 * 掉落概率符合 2:3:2 的分布
-	 */
-	private ItemStack _get_drop_item_stack() {
-		int drop_value = new Random().nextInt(rate_sum) + 1; // 1 ~ rate_sum
-
-		for (BlockLuckyDrop b : drop_list) {
-			drop_value -= b.drop_rate;
-
-			if (drop_value <= 0) {
-				return b.item_stack.copy(); // 必须调用 copy 方法来复制一份，否则重复同一种就不再掉落了
-			}
-		}
-
-		return null;
+	private void _init_dropper() {
+		dropper = new MCGRandomDroper("幸运方块");
+		dropper.add_item_stack(5,   new ItemStack(Block.blockDiamond));
+		dropper.add_item_stack(5,   new ItemStack(Block.enderChest));
+		dropper.add_item_stack(50,  new ItemStack(Item.swordDiamond));
+		dropper.add_item_stack(100, new ItemStack(Item.diamond));
 	}
 
 	// -------------------------------------------
-	
-	private class BlockLuckyDrop {
-		private ItemStack item_stack;
-		private int drop_rate;
-
-		private BlockLuckyDrop(ItemStack item_stack, int drop_rate) {
-			this.item_stack = item_stack;
-			this.drop_rate = drop_rate;
-		}
-	}
 
 	private static class BlockLuckyDamage extends DamageSource {
 		private boolean explode = false;
