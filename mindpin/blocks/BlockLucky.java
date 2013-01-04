@@ -6,6 +6,8 @@ import java.util.Random;
 
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
+import mindpin.random.MCGRandomHandler;
+import mindpin.random.MCGRandomSwitcher;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -35,32 +37,39 @@ public class BlockLucky extends Block {
 	}
 	
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x,
-			int y, int z) {
+	public boolean removeBlockByPlayer(final World world, final EntityPlayer player, final int x,
+			final int y, final int z) {
 		boolean re = super.removeBlockByPlayer(world, player, x, y, z);
 		
-		if (!world.isRemote) {
-			
-			int f = new Random().nextInt(4); // 0, 1, 2, 3
-			
-			if (f == 0) {
+		if (world.isRemote) return re;
+		
+		MCGRandomSwitcher rs = new MCGRandomSwitcher(4, "幸运方块");
+		
+		rs.add_handler(new MCGRandomHandler(1, "诅咒死亡") {
+			@Override
+			public void handle() {
 				player.attackEntityFrom(new BlockLuckyDamage(), 9999);
-				System.out.println("幸运方块：诅咒");
 			}
-			
-			if (f == 1) {
-				player.attackEntityFrom(new BlockLuckyDamage().set_explode(), 9999);
-				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系
+		});
+		
+		rs.add_handler(new MCGRandomHandler(1, "爆炸死亡") {
+			@Override
+			public void handle() {
+				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系，玩家是必死的
 				// 但是应该会伤及无辜
+				player.attackEntityFrom(new BlockLuckyDamage().set_explode(), 9999);
 				world.createExplosion(player, player.posX, player.posY, player.posZ, EXPLOSION_RADIUS, true);
-				System.out.println("幸运方块：爆炸");
 			}
-			
-			if (f > 1) {
-				this.dropBlockAsItem_do(world, x, y, z, _get_drop_item_stack());
+		});
+		
+		rs.add_handler(new MCGRandomHandler(2, "随机掉落") {
+			@Override
+			public void handle() {
+				dropBlockAsItem_do(world, x, y, z, _get_drop_item_stack());
 			}
-			
-		}
+		});
+		
+		rs.run();
 		
 		return re;
 	}
