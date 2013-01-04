@@ -10,6 +10,7 @@ import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
 import mindpin.random.MCGRandomHandler;
 import mindpin.random.MCGRandomSwitcher;
+import mindpin.utils.MCGDeath;
 import mindpin.utils.MCGPosition;
 import mindpin.utils.MCGUtils;
 import net.minecraft.block.Block;
@@ -17,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.src.ModLoader;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
@@ -80,7 +80,7 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		rs.add_handler(new MCGRandomHandler(5, "死亡") {
 			@Override
 			public void handle() {
-				player.attackEntityFrom(new ItemLuckyBookmarkDamage(), 9999);
+				MCGDeath.kill(player, " 手中的四叶草神符化成了灰烬…… 地下矿道的怨魂带走了 " + player.getEntityName());
 			}
 		});
 		
@@ -192,18 +192,5 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		for(Object[] o : objs) {
 			ModLoader.addRecipe(is, o);
 		}
-	}
-	
-	public static class ItemLuckyBookmarkDamage extends DamageSource {
-
-		protected ItemLuckyBookmarkDamage() {
-			super("item_clover_bookmark_damage");
-		}
-		
-		@Override
-		public String getDeathMessage(EntityPlayer player) {
-			return "§c四叶草书签化成了飞灰…… " + player.getEntityName() + " 被地下矿道徘徊的游魂拉进了死亡的世界"; // 
-		}
-		
 	}
 }

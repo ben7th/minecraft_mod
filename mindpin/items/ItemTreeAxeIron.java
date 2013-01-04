@@ -2,12 +2,12 @@ package mindpin.items;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Stack;
 
 import mindpin.blocks.IhasRecipe;
 import mindpin.proxy.ClientProxy;
 import mindpin.proxy.R;
+import mindpin.random.MCGRandomString;
 import mindpin.utils.MCGPosition;
 import mindpin.utils.MCGUtils;
 import net.minecraft.block.Block;
@@ -22,7 +22,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 
-	final private static String[] TREE_DOWN_MSGS = new String[] {
+	final private static MCGRandomString TREE_DOWN_MSGS = new MCGRandomString(new String[] {
 			"树倒啦 ~~~~~~~ >_<", 
 			"要致富，先种树，再砍树……", 
 			"砍树不忘栽树人，可持续发展人人有责。",
@@ -31,8 +31,8 @@ public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 			"劳动人民砍树忙 @_@",
 			"呢棵树太乞人憎咗，仆街呀！！",
 			"树没了，树上的小鸟飞走了，向没有绿色猪头的地方飞去……",
-		};
-
+		});
+	
 	public ItemTreeAxeIron(int item_id) {
 		super(item_id, EnumToolMaterial.IRON);
 
@@ -101,8 +101,7 @@ public class ItemTreeAxeIron extends ItemAxe implements IhasRecipe {
 	}
 
 	private void _send_public_notice(World world, EntityPlayer player) {
-		String msg = TREE_DOWN_MSGS[new Random().nextInt(TREE_DOWN_MSGS.length)];
-		MCGUtils.send_public_notice(world, "§6" + player.getEntityName() + " §6" + msg);
+		MCGUtils.send_public_notice(world, "§6" + player.getEntityName() + " " + TREE_DOWN_MSGS.get_string());
 	}
 
 	static class TAPosition extends MCGPosition {
