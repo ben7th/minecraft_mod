@@ -46,9 +46,9 @@ public class BlockLucky extends Block {
 		
 		final MCGPosition this_pos = new MCGPosition(world, x, y, z);
 		
-		MCGRandomSwitcher rs = new MCGRandomSwitcher(4, "幸运方块");
+		MCGRandomSwitcher rs = new MCGRandomSwitcher("幸运方块");
 		
-		rs.add_handler(new MCGRandomHandler(0, "诅咒死亡") {
+		rs.add_handler(new MCGRandomHandler(1, "诅咒死亡") {
 			@Override
 			public void handle() {
 				player.attackEntityFrom(new BlockLuckyDamage(), 9999);
@@ -56,7 +56,7 @@ public class BlockLucky extends Block {
 			}
 		});
 		
-		rs.add_handler(new MCGRandomHandler(0, "爆炸死亡") {
+		rs.add_handler(new MCGRandomHandler(1, "爆炸死亡") {
 			@Override
 			public void handle() {
 				// 爆炸，不过这个爆炸和玩家本人死亡没什么关系，玩家是必死的
@@ -67,7 +67,7 @@ public class BlockLucky extends Block {
 			}
 		});
 		
-		rs.add_handler(new MCGRandomHandler(4, "随机掉落") {
+		rs.add_handler(new MCGRandomHandler(2, "随机掉落") {
 			@Override
 			public void handle() {
 				this_pos.drop_self_at_as(x, y, z, MCGEEK.block_lucky);
@@ -107,11 +107,11 @@ public class BlockLucky extends Block {
 	 * 随着设定丰富慢慢改吧
 	 */
 	private void _init_dropper() {
-		dropper = new MCGRandomDroper("幸运方块");
-		dropper.add_item_stack(5,   new ItemStack(Block.blockDiamond));
-		dropper.add_item_stack(5,   new ItemStack(Block.enderChest));
-		dropper.add_item_stack(50,  new ItemStack(Item.swordDiamond));
-		dropper.add_item_stack(100, new ItemStack(Item.diamond));
+		this.dropper = new MCGRandomDroper("幸运方块");
+		this.dropper.add_item_stack(5,   new ItemStack(Block.blockDiamond));
+		this.dropper.add_item_stack(5,   new ItemStack(Block.enderChest));
+		this.dropper.add_item_stack(50,  new ItemStack(Item.swordDiamond));
+		this.dropper.add_item_stack(100, new ItemStack(Item.diamond));
 	}
 
 	// -------------------------------------------

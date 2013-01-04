@@ -12,17 +12,16 @@ import java.util.Random;
  */
 public class MCGRandomSwitcher {
 	
-	private List<MCGRandomHandler> handlers; // 回调集合
-	private int rate_sum; // 总概率分母
+	private List<MCGRandomHandler> handlers = new ArrayList<MCGRandomHandler>(); // 回调集合
+	private int rate_sum = 0; // 总概率分母
 	public String label;
 	
-	public MCGRandomSwitcher(int total_rate, String label) {
-		this.handlers = new ArrayList<MCGRandomHandler>();
-		this.rate_sum = total_rate;
+	public MCGRandomSwitcher(String label) {
 		this.label = label;
 	}
 	
 	public void add_handler(MCGRandomHandler handler) {
+		this.rate_sum += handler.rate;
 		this.handlers.add(handler);
 	}
 	
@@ -39,11 +38,11 @@ public class MCGRandomSwitcher {
 	 * 则 ABC 的执行几率符合预期
 	 */
 	public void run() {		
-		int result_value = new Random().nextInt(rate_sum) + 1; // 1 ~ rate_sum
+		int rand_value = new Random().nextInt(rate_sum) + 1; // 1 ~ rate_sum
 		
 		for (MCGRandomHandler handler : handlers) {
-			result_value -= handler.rate;
-			if (result_value <= 0) {
+			rand_value -= handler.rate;
+			if (rand_value <= 0) {
 				System.out.println("概率触发：" + label + "," + handler.label + "," + handler.rate + "/" + rate_sum);
 				handler.handle();
 				return;

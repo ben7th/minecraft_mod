@@ -75,7 +75,7 @@ public class ItemCloverBookmarkOfOre extends Item implements IhasRecipe {
 		 * 89% 几率，正常掉落
 		 */
 		
-		MCGRandomSwitcher rs = new MCGRandomSwitcher(100, "四叶草神符：矿石");
+		MCGRandomSwitcher rs = new MCGRandomSwitcher("四叶草神符：矿石");
 		
 		rs.add_handler(new MCGRandomHandler(5, "死亡") {
 			@Override

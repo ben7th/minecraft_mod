@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
  */
 public class MCGRandomDroper {
 	private List<Drop> drop_list;
-	private int total_rate;
 	public String label;
 	
 	public MCGRandomDroper(String label) {
@@ -19,7 +18,6 @@ public class MCGRandomDroper {
 	}
 	
 	public MCGRandomDroper add_item_stack(int drop_rate, ItemStack item_stack) {
-		this.total_rate += drop_rate;
 		this.drop_list.add(new Drop(drop_rate, item_stack));
 		return this;
 	}
@@ -27,7 +25,7 @@ public class MCGRandomDroper {
 	public ArrayList<ItemStack> get_drop() {
 		final ArrayList<ItemStack> re = new ArrayList<ItemStack>();
 		
-		MCGRandomSwitcher rs = new MCGRandomSwitcher(total_rate, label + "：掉落");
+		MCGRandomSwitcher rs = new MCGRandomSwitcher(label + "：掉落");
 		for (final Drop d : drop_list) {
 			rs.add_handler(new MCGRandomHandler(d.drop_rate, d.item_stack.getDisplayName()) {
 				@Override
@@ -37,7 +35,6 @@ public class MCGRandomDroper {
 				}
 			});
 		}
-		
 		rs.run();
 		
 		return re;
