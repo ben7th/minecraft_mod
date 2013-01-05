@@ -59,7 +59,7 @@ public class MCGEEK {
 		MCGUtils.init_mod_item(item_wheat_cutter, "item_wheat_cutter", "G-两用镰刀");
 		
 		MCGUtils.init_mod_item(item_clover_bookmark, "item_lucky_bookmark", "G-四叶草书签");
-		MCGUtils.init_mod_item(item_clover_bookmark_of_ore, "item_lucky_bookmark_of_ore", "G-四叶草魔符：矿石");
+		MCGUtils.init_mod_item(item_clover_bookmark_of_ore, "item_lucky_bookmark_of_ore", "G-四叶草神符：矿石");
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());
