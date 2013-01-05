@@ -10,7 +10,6 @@ import mindpin.proxy.R;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
 
 public class ItemCloverBookmark extends Item implements IhasRecipe {
 	
@@ -30,9 +29,7 @@ public class ItemCloverBookmark extends Item implements IhasRecipe {
 	}
 	
 	@Override
-	public List<Object[]> recipe_objects() {
-		List<Object[]> res = new ArrayList<Object[]>();
-		
+	public List<MCGRecipe> get_recipes() {
 		Object[] o = new Object[] {
 			"A",
 			"B",
@@ -41,18 +38,10 @@ public class ItemCloverBookmark extends Item implements IhasRecipe {
 			Character.valueOf('B'), Item.silk,
 			Character.valueOf('C'), Item.paper,
 		};
-		
-		res.add(o);
-		return res;
-	}
-	
-	@Override
-	public void add_recipes() {
 		ItemStack is = new ItemStack(this);
-		List<Object[]> objs = recipe_objects();
 		
-		for(Object[] o : objs) {
-			ModLoader.addRecipe(is, o);
-		}
+		List<MCGRecipe> re = new ArrayList<MCGRecipe>();
+		re.add(new MCGRecipe(o, is));
+		return re;
 	}
 }

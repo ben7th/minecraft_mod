@@ -1,5 +1,7 @@
 package mindpin.utils;
 
+import mindpin.blocks.IhasRecipe;
+import mindpin.blocks.IhasRecipe.MCGRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,7 +26,17 @@ public class MCGUtils {
 		item.setItemName(eng_name);
 		ModLoader.addName(item, chs_name);
 		
+		if (item instanceof IhasRecipe) {
+			add_recipe((IhasRecipe) item);
+		}
+		
 		return item;
+	}
+	
+	public static void add_recipe(IhasRecipe ir) {
+		for (MCGRecipe r : ir.get_recipes()) {
+			ModLoader.addRecipe(r.item_stack, r.recipe_params);
+		} 
 	}
 	
 	public static void send_public_notice(World world, String string) {

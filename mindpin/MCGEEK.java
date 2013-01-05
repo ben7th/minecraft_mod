@@ -55,16 +55,11 @@ public class MCGEEK {
 		
 		// 工具是人类前进的基础
 		MCGUtils.init_mod_item(item_board_axe_iron, "item_tree_axe_iron", "G-铁制砍树斧");
-		((ItemTreeAxeIron) item_board_axe_iron).add_recipes();
 		MCGUtils.init_mod_item(item_leaves_cutter, "item_leaves_cutter", "G-强力树叶剪");
-		((ItemLeavesCutter) item_leaves_cutter).add_recipes();
 		MCGUtils.init_mod_item(item_wheat_cutter, "item_wheat_cutter", "G-两用镰刀");
-		((ItemWheatCutter) item_wheat_cutter).add_recipes();
 		
 		MCGUtils.init_mod_item(item_clover_bookmark, "item_lucky_bookmark", "G-四叶草书签");
-		((ItemCloverBookmark) item_clover_bookmark).add_recipes();
 		MCGUtils.init_mod_item(item_clover_bookmark_of_ore, "item_lucky_bookmark_of_ore", "G-四叶草魔符：矿石");
-		((ItemCloverBookmarkOfOre) item_clover_bookmark_of_ore).add_recipes();
 		
 		// 地形创造器
 		GameRegistry.registerWorldGenerator(new GeneratorBlockLucky());
